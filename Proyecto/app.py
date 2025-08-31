@@ -5,15 +5,21 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     name = None
-    name = "Flask"
-    return f"Hello, {name}!"
+    name = "Bienvenido"
+    return f"Hola, {name}!"
 
    
-@app.route('/index')
+@app.route('/ucundinamarca')
 def index():
-    Myname= "Flask"
+    Myname= "Proyecto de Machine Learning"
     return render_template('index.html', name=Myname)
+
+@app.route('/actividad1')
+def actividad1():
+    return render_template('actividad1.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
     
