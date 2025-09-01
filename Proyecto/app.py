@@ -16,7 +16,6 @@ def index():
 def actividad1():
     return render_template('actividad1.html')
 
-
 if __name__ == '__main__':
     app.run(debug=True)
 
