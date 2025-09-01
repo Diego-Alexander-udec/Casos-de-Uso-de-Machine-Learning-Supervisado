@@ -4,10 +4,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    name = None
     name = "Bienvenido"
-    return f"Hola, {name}!"
-
+    return render_template('home.html', name=name)
    
 @app.route('/ucundinamarca')
 def index():
@@ -22,4 +20,4 @@ def actividad1():
 if __name__ == '__main__':
     app.run(debug=True)
 
-    
+
