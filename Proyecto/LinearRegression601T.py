@@ -1,7 +1,8 @@
-# Importación de bibliotecas necesarias
-import pandas as pd  # Para manipulación y análisis de datos
-import matplotlib.pyplot as plt  # Para visualización de datos
-from sklearn.linear_model import LinearRegression  # Para crear el modelo de regresión
+import pandas as pd
+import matplotlib.pyplot as plt
+import os
+from sklearn.linear_model import LinearRegression
+
 
 # Creación del conjunto de datos con más registros y mejor distribución
 datos = {
@@ -23,19 +24,31 @@ modelo.fit(X, y)  # Ajuste del modelo con los datos de entrenamiento
 
 # Función para estimar ventas de helados
 def EstimarVentasHelados(temperatura, dia_semana):
-    """
-    Estima las ventas de helados según la temperatura y día de la semana
-    
-    Args:
-        temperatura: Temperatura en grados Celsius (float)
-        dia_semana: Día de la semana (int: 1=Lunes, 7=Domingo)
-    
-    Returns:
-        int: Cantidad estimada de helados a vender
-    """
-    # Realiza la predicción usando el modelo entrenado
-    result = modelo.predict([[temperatura, dia_semana]])[0]
+    import pandas as pd
+    X_new = pd.DataFrame({'Temperatura_C': [temperatura], 'Dia_Semana': [dia_semana]})
+    result = modelo.predict(X_new)[0]
     return round(result)  # Redondea el resultado al número entero más cercano
+
+def generar_grafica(temperatura=None, dia_semana=None, resultado=None, filename="grafica.png"):
+    plt.figure(figsize=(10, 6))
+    plt.scatter(df['Temperatura_C'], df['Ventas_Helados'], c=df['Dia_Semana'], cmap='viridis', label="Datos entrenamiento")
+    plt.xlabel('Temperatura (°C)')
+    plt.ylabel('Ventas de Helados')
+    plt.title('Relación entre Temperatura y Ventas de Helados')
+    temp_range = sorted(df['Temperatura_C'].unique())
+    # Solo una línea de tendencia para el día digitado por el usuario
+    if dia_semana is not None:
+        X_pred = pd.DataFrame({'Temperatura_C': temp_range, 'Dia_Semana': [dia_semana]*len(temp_range)})
+        y_pred = modelo.predict(X_pred)
+        plt.plot(temp_range, y_pred, color='gray', label=f"Tendencia Día {dia_semana}")
+    if temperatura is not None and dia_semana is not None and resultado is not None:
+        plt.scatter([temperatura], [resultado], color='red', s=120, label="Tu predicción")
+    plt.legend()
+    plt.tight_layout()
+    static_folder = os.path.join(os.path.dirname(__file__), 'static')
+    filepath = os.path.join(static_folder, filename)
+    plt.savefig(filepath)
+    plt.close()
 
 # Visualización de los datos
 plt.figure(figsize=(10, 6))
@@ -44,7 +57,6 @@ plt.colorbar(label='Día de la semana')
 plt.xlabel('Temperatura (°C)')
 plt.ylabel('Ventas de Helados')
 plt.title('Relación entre Temperatura y Ventas de Helados')
-plt.show()
 
 # Ejemplo de uso del modelo
 temperatura_ejemplo = 12
