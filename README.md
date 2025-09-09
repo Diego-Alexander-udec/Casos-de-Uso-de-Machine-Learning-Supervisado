@@ -1,2 +1,2 @@
-# Casos-de-Uso-de-Machine-Learning-Supervisado
-El propósito de esta actividad es que los estudiantes investiguen cuatro casos de uso relevantes de Machine Learning Supervisado y presenten sus hallazgos dentro de una aplicación web utilizando Flask como framework backend y Jinja2 para la visualización en un template HTML.
+Semana 4 - PDF: Regresión Lineal
+Implementar una regresión lineal según un tema asignado (dos variables independientes y una dependiente), integrándola en una aplicación web con Flask
