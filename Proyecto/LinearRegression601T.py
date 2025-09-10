@@ -25,6 +25,10 @@ modelo.fit(X, y)  # Ajuste del modelo con los datos de entrenamiento
 # Función para estimar ventas de helados
 def EstimarVentasHelados(temperatura, dia_semana):
     import pandas as pd
+    if temperatura > 50:
+        return 0  # No hay ventas si la temperatura es superior a 50°C
+    if temperatura < 0:
+        return -1  # Ventas negativas si la temperatura es menor a 0°C
     X_new = pd.DataFrame({'Temperatura_C': [temperatura], 'Dia_Semana': [dia_semana]})
     result = modelo.predict(X_new)[0]
     return round(result)  # Redondea el resultado al número entero más cercano
