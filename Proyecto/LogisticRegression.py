@@ -8,6 +8,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_auc_score, roc_curve
+from joblib import dump
 
 # --- 1. Creación de un Conjunto de Datos Simulado ---
 np.random.seed(42)  # Para reproducibilidad
@@ -129,9 +130,37 @@ print(f"Probabilidad de que asista: {probabilidad * 100:.2f}%")
 
 
 # --- 6. Guardar el Modelo Entrenado ---
-from joblib import dump
-
 nombre_archivo_modelo = 'modelo_citas_logistico.joblib'
 print(f"\n--- Guardando el modelo en el archivo: {nombre_archivo_modelo} ---")
 dump(modelo_logistico, nombre_archivo_modelo)
 print("¡Modelo guardado exitosamente!")
+
+
+# --- 7. Funciones para Evaluación y Predicción ---
+def evaluate():
+    # Usa X_pruebas, y_pruebas, modelo_logistico
+    y_pred = modelo_logistico.predict(X_pruebas)
+    y_pred_proba = modelo_logistico.predict_proba(X_pruebas)[:, 1]
+    accuracy = accuracy_score(y_pruebas, y_pred)
+    report = classification_report(y_pruebas, y_pred, target_names=['No', 'Sí'], output_dict=True)
+    conf_matrix = confusion_matrix(y_pruebas, y_pred)
+    # Guardar matriz de confusión como imagen
+    import matplotlib.pyplot as plt
+    import os
+    plt.figure(figsize=(4, 4))
+    sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
+                xticklabels=['No', 'Sí'], yticklabels=['No', 'Sí'])
+    plt.xlabel('Predicho')
+    plt.ylabel('Real')
+    plt.title('Matriz de Confusión')
+    static_folder = os.path.join(os.path.dirname(__file__), 'static')
+    plt.savefig(os.path.join(static_folder, 'confusion_logistica.png'))
+    plt.close()
+    return accuracy, report, conf_matrix
+
+def predict_label(features, threshold=0.5):
+    # features: dict con las variables del formulario
+    df_new = pd.DataFrame([features])
+    proba = modelo_logistico.predict_proba(df_new)[0][1]
+    label = "Sí" if proba >= threshold else "No"
+    return label, proba
