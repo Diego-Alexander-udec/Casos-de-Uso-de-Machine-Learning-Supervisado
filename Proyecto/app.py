@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 import LinearRegression601T
-import RegresionLogistica
 
 app = Flask(__name__)
 
@@ -28,10 +27,6 @@ def lr():
 def conceptos_regresion():
     return render_template('conceptos_regresion.html')
 
-@app.route('/conceptos_logistica')
-def conceptos_logistica():
-    return render_template('conceptos_logistica.html')
-
 @app.route('/regresion_lineal', methods=['GET', 'POST'])
 def regresion_lineal():
     resultado = None
@@ -44,21 +39,6 @@ def regresion_lineal():
             resultado = LinearRegression601T.EstimarVentasHelados(temperatura, dia_semana)
     LinearRegression601T.generar_grafica(temperatura, dia_semana, resultado)
     return render_template('regresion_lineal.html', resultado=resultado)
-
-@app.route('/regresion_logistica', methods=['GET', 'POST'])
-def regresion_logistica():
-    accuracy, report, conf_matrix = RegresionLogistica.evaluate()
-    resultado = None
-    if request.method == 'POST':
-        features = {
-            'Edad': int(request.form['Edad']),
-            'TiempoEspera': int(request.form['TiempoEspera']),
-            'CitasPrevias': int(request.form['CitasPrevias']),
-            'DiaSemana': request.form['DiaSemana']
-        }
-        label, proba = RegresionLogistica.predict_label(features)
-        resultado = {'label': label, 'proba': proba}
-    return render_template('regresion_logistica.html', accuracy=round(accuracy*100,2), report=report, resultado=resultado)
 
 if __name__ == '__main__':
     app.run(debug=True)
