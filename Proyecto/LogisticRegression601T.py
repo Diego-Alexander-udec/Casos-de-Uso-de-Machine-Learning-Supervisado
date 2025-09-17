@@ -3,13 +3,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.metrics import confusion_matrix, roc_curve, roc_auc_score, accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_auc_score, roc_curve
-import joblib # Para guardar el modelo
+import joblib
 
 # --- 1. Creación de un Conjunto de Datos Simulado ---
 # En un caso real, cargarías tus datos desde un archivo (ej: pd.read_csv('citas.csv'))
@@ -139,3 +139,50 @@ joblib.dump(modelo_logistico, 'modelo_citas.joblib')
 X_prueba.to_csv('X_prueba.csv', index=False)
 y_prueba.to_csv('y_prueba.csv', index=False)
 print("¡Modelo y datos de prueba guardados!")
+
+class ModeloLogistico:
+    def __init__(self):
+        self.modelo = joblib.load('modelo_citas.joblib')
+        self.X_test = pd.read_csv('X_prueba.csv')
+        self.y_test = pd.read_csv('y_prueba.csv').iloc[:, 0]
+        
+    def predecir_asistencia(self, edad, tiempo_espera, citas_previas, dia_semana):
+        nuevo_dato = pd.DataFrame({
+            'Edad': [edad],
+            'TiempoEspera': [tiempo_espera],
+            'CitasPrevias': [citas_previas],
+            'DiaSemana': [dia_semana]
+        })
+        
+        prediccion = self.modelo.predict(nuevo_dato)[0]
+        probabilidad = self.modelo.predict_proba(nuevo_dato)[0][1]
+        
+        return prediccion, round(probabilidad * 100, 2)
+    
+    def plot_confusion_matrix(self):
+        y_pred = self.modelo.predict(self.X_test)
+        conf_matrix = confusion_matrix(self.y_test, y_pred)
+        
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=['No Asistió', 'Sí Asistió'],
+                    yticklabels=['No Asistió', 'Sí Asistió'])
+        plt.xlabel('Predicción')
+        plt.ylabel('Valor Real')
+        plt.title('Matriz de Confusión')
+        
+    def plot_roc_curve(self):
+        y_pred_proba = self.modelo.predict_proba(self.X_test)[:, 1]
+        auc = roc_auc_score(self.y_test, y_pred_proba)
+        fpr, tpr, _ = roc_curve(self.y_test, y_pred_proba)
+        
+        plt.figure(figsize=(8, 6))
+        plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'Curva ROC (AUC = {auc:.2f})')
+        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+        plt.xlabel('Tasa de Falsos Positivos (FPR)')
+        plt.ylabel('Tasa de Verdaderos Positivos (TPR)')
+        plt.title('Curva ROC')
+        plt.legend(loc='lower right')
+
+# Crear instancia global del modelo
+modelo_logistico = ModeloLogistico()

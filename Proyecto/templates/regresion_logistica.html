@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Regresión Logística - Predicción de Asistencia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="fondo-personalizado text-white">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Predicción de Asistencia a Citas Médicas</h2>
+      <form method="post" class="mb-4">
+        <div class="mb-3">
+          <label for="edad" class="form-label">Edad:</label>
+          <input type="number" class="form-control" id="edad" name="edad" required>
+        </div>
+        <div class="mb-3">
+          <label for="tiempo_espera" class="form-label">Tiempo de espera (días):</label>
+          <input type="number" class="form-control" id="tiempo_espera" name="tiempo_espera" required>
+        </div>
+        <div class="mb-3">
+          <label for="citas_previas" class="form-label">Número de citas previas:</label>
+          <input type="number" class="form-control" id="citas_previas" name="citas_previas" required>
+        </div>
+        <div class="mb-3">
+          <label for="dia_semana" class="form-label">Día de la semana:</label>
+          <select class="form-control" id="dia_semana" name="dia_semana" required>
+            <option value="Lunes">Lunes</option>
+            <option value="Martes">Martes</option>
+            <option value="Miercoles">Miércoles</option>
+            <option value="Jueves">Jueves</option>
+            <option value="Viernes">Viernes</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-secondary">Predecir</button>
+      </form>
+
+      {% if resultado is not none %}
+        <div class="alert alert-success text-center">
+          <strong>Predicción:</strong> {% if resultado == 1 %}Asistirá{% else %}No asistirá{% endif %}
+          <br>
+          <strong>Probabilidad de asistencia:</strong> {{ probabilidad }}%
+        </div>
+      {% endif %}
+
+      <div class="mb-4">
+        <strong>Explicación del modelo:</strong>
+        <p>
+          Este modelo utiliza regresión logística para predecir la probabilidad de que un paciente asista a su cita médica
+          basándose en factores como la edad, tiempo de espera, historial de citas y día de la semana.
+        </p>
+      </div>
+
+      {% if matriz_confusion_img %}
+        <div class="mb-4 text-center">
+          <h4>Matriz de Confusión</h4>
+          <img src="data:image/png;base64,{{ matriz_confusion_img }}" alt="Matriz de confusión" class="img-fluid rounded">
+        </div>
+      {% endif %}
+
+      {% if curva_roc_img %}
+        <div class="mb-4 text-center">
+          <h4>Curva ROC</h4>
+          <img src="data:image/png;base64,{{ curva_roc_img }}" alt="Curva ROC" class="img-fluid rounded">
+        </div>
+      {% endif %}
+
+      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
+    </div>
+  </body>
+</html>
