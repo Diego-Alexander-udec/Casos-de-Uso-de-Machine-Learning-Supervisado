@@ -12,10 +12,10 @@
       <h2 class="text-center mb-4">Conceptos básicos de Regresión Logística</h2>
       <div class="bg-dark p-4 rounded">
         <h4>Definición</h4>
-
         <p>
           La regresión logística es un modelo que se utiliza cuando la variable que queremos predecir solo tiene dos posibles resultados, como sí/no, 0/1 o verdadero/falso
         </p>
+        <h4>Funcionamiento</h4>
         <p>
           Lo que hace este modelo es tomar varias variables independientes combinarlas de forma lineal y luego aplicar una función llamada logit que transforma esa combinación en un valor real
         </p>
@@ -29,16 +29,15 @@
           Brixius (2016) explica que el logit convierte probabilidades en valores reales y la sigmoide hace el trabajo inverso es decir devolviéndolos al rango [0, 1] Además Chawla (2023) dice que el uso de la sigmoide en este modelo tiene una base matemática sólida derivada de la probabilidad condicional en distribuciones Bernoulli.
         </p>
 
-        <h4>Referencias</h4>
+        <h4 class="mt-4">Referencias</h4>
         <ul class="references-list">
           <li>Brixius, N. (2016, June 4). <em>The Logit and Sigmoid Functions</em>. Nathan Brixius. <a href="https://nathanbrixius.wordpress.com/2016/06/04/functions-i-have-known-logit-and-sigmoid/" target="_blank" rel="noopener">https://nathanbrixius.wordpress.com/2016/06/04/functions-i-have-known-logit-and-sigmoid/</a></li>
           <li>Chawla, A. (2023, August 8). <em>Why do we use sigmoid in logistic regression?</em> Daily Dose of Data Science. <a href="https://www.dailydoseofds.com/why-do-we-use-sigmoid-in-logistic-regression/" target="_blank" rel="noopener">https://www.dailydoseofds.com/why-do-we-use-sigmoid-in-logistic-regression/</a></li>
           <li>GeeksforGeeks. (2023). <em>Binary Variables – Pattern Recognition and Machine Learning</em>. <a href="https://www.geeksforgeeks.org/machine-learning/binary-variables-pattern-recognition-and-machine-learning/" target="_blank" rel="noopener">https://www.geeksforgeeks.org/machine-learning/binary-variables-pattern-recognition-and-machine-learning/</a></li>
           <li>Scikit-learn. (2023). <em>Logistic Regression</em>. <a href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression</a></li>
         </ul>
-
-        <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
       </div>
+      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
     </div>
   </body>
 </html>
