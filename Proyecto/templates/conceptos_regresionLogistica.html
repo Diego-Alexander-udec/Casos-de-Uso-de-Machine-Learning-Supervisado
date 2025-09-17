@@ -13,27 +13,34 @@
       <div class="bg-dark p-4 rounded">
         <h4>Definición</h4>
         <p>
-          La regresión logística es un método estadístico para predecir una variable categórica binaria basándose en una o más variables predictoras. Se utiliza principalmente para problemas de clasificación binaria.
+          La regresión logística es un método estadístico para predecir una variable categórica binaria basándose en una o más variables predictoras. Se utiliza principalmente para problemas de clasificación binaria donde la variable de salida tiene dos posibles resultados (0 o 1, sí o no, verdadero o falso).
         </p>
         <h4>Supuestos principales</h4>
         <ul>
-          <li><strong>Variable dependiente binaria:</strong> La variable objetivo debe ser dicotómica (dos categorías)</li>
-          <li><strong>Independencia de observaciones:</strong> Las observaciones deben ser independientes entre sí</li>
-          <li><strong>Ausencia de multicolinealidad:</strong> Las variables predictoras no deben estar altamente correlacionadas</li>
-          <li><strong>Tamaño de muestra:</strong> Se requiere un número suficiente de casos para cada categoría</li>
+          <li><strong>Variable dependiente binaria:</strong> La variable objetivo debe ser dicotómica (dos categorías). Por ejemplo: asistió/no asistió, aprobó/no aprobó, compró/no compró.</li>
+          <li><strong>Independencia de observaciones:</strong> Las observaciones deben ser independientes entre sí. Cada registro debe representar un evento único y no estar relacionado con otros registros.</li>
+          <li><strong>Ausencia de multicolinealidad:</strong> Las variables predictoras no deben estar altamente correlacionadas entre sí, ya que esto puede afectar la estabilidad y la interpretabilidad del modelo.</li>
+          <li><strong>Tamaño de muestra:</strong> Se requiere un número suficiente de casos para cada categoría. Se recomienda tener al menos 50 observaciones por variable predictora.</li>
+          <li><strong>Relación lineal:</strong> Debe existir una relación lineal entre las variables independientes y el logit de la variable dependiente.</li>
         </ul>
         <h4>Aplicaciones comunes</h4>
         <ul>
-          <li>Predicción de riesgo en medicina</li>
-          <li>Detección de fraude</li>
+          <li>Predicción de riesgo en medicina (probabilidad de que un paciente tenga una enfermedad)</li>
+          <li>Detección de fraude en transacciones bancarias</li>
           <li>Predicción de asistencia a citas médicas</li>
-          <li>Análisis de crédito</li>
+          <li>Análisis de riesgo crediticio</li>
+          <li>Predicción de deserción de clientes</li>
+          <li>Clasificación de correos electrónicos (spam/no spam)</li>
         </ul>
+        <p><strong>Ejemplo encontrado:</strong> Sistema de predicción de asistencia a citas médicas basado en factores como edad, historial de citas previas y tiempo de espera.</p>
         <p><strong>Referencias:</strong></p>
         <ul class="references-list">
           <li>Hosmer Jr, D. W., Lemeshow, S., & Sturdivant, R. X. (2013). <em>Applied logistic regression</em>.</li>
           <li>IBM. (2023). <em>Regresión logística</em>.
             <a href="https://www.ibm.com/topics/logistic-regression" target="_blank" rel="noopener">https://www.ibm.com/topics/logistic-regression</a>
+          </li>
+          <li>Scikit-learn. (2023). <em>Logistic Regression</em>.
+            <a href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression</a>
           </li>
         </ul>
       </div>
