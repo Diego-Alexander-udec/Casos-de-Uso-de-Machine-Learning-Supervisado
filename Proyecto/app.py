@@ -33,6 +33,10 @@ def lr():
 def conceptos_regresion():
     return render_template('conceptos_regresion.html')
 
+@app.route('/conceptos_regresionLogistica')
+def conceptos_regresionLogistica():
+    return render_template('conceptos_regresionLogistica.html')
+
 @app.route('/regresion_lineal', methods=['GET', 'POST'])
 def regresion_lineal():
     resultado = None
