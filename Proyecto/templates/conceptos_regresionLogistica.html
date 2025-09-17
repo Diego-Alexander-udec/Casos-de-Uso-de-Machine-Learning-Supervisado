@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conceptos básicos - Regresión Logística</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="fondo-personalizado text-white">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Conceptos básicos de Regresión Logística</h2>
+      <div class="bg-dark p-4 rounded">
+        <h4>Definición</h4>
+        <p>
+          La regresión logística es un método estadístico para predecir una variable categórica binaria basándose en una o más variables predictoras. Se utiliza principalmente para problemas de clasificación binaria.
+        </p>
+        <h4>Supuestos principales</h4>
+        <ul>
+          <li><strong>Variable dependiente binaria:</strong> La variable objetivo debe ser dicotómica (dos categorías)</li>
+          <li><strong>Independencia de observaciones:</strong> Las observaciones deben ser independientes entre sí</li>
+          <li><strong>Ausencia de multicolinealidad:</strong> Las variables predictoras no deben estar altamente correlacionadas</li>
+          <li><strong>Tamaño de muestra:</strong> Se requiere un número suficiente de casos para cada categoría</li>
+        </ul>
+        <h4>Aplicaciones comunes</h4>
+        <ul>
+          <li>Predicción de riesgo en medicina</li>
+          <li>Detección de fraude</li>
+          <li>Predicción de asistencia a citas médicas</li>
+          <li>Análisis de crédito</li>
+        </ul>
+        <p><strong>Referencias:</strong></p>
+        <ul class="references-list">
+          <li>Hosmer Jr, D. W., Lemeshow, S., & Sturdivant, R. X. (2013). <em>Applied logistic regression</em>.</li>
+          <li>IBM. (2023). <em>Regresión logística</em>.
+            <a href="https://www.ibm.com/topics/logistic-regression" target="_blank" rel="noopener">https://www.ibm.com/topics/logistic-regression</a>
+          </li>
+        </ul>
+      </div>
+      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
+    </div>
+  </body>
+</html>

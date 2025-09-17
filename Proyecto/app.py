@@ -1,6 +1,12 @@
 from flask import Flask, render_template, request
 import LinearRegression601T
+import io
+import base64
+import matplotlib.pyplot as plt 
+import matplotlib
+from LogisticRegression601T import modelo_logistico
 
+matplotlib.use('Agg')  # Configurar el backend de matplotlib para uso sin interfaz gráfica
 app = Flask(__name__)
 
 @app.route("/")
@@ -43,6 +49,46 @@ def regresion_lineal():
             resultado = LinearRegression601T.EstimarVentasHelados(temperatura, dia_semana)
     LinearRegression601T.generar_grafica(temperatura, dia_semana, resultado)
     return render_template('regresion_lineal.html', resultado=resultado)
+
+@app.route('/regresion_logistica', methods=['GET', 'POST'])
+def regresion_logistica():
+    resultado = None
+    probabilidad = None
+    matriz_confusion_img = None
+    curva_roc_img = None
+    
+    if request.method == 'POST':
+        edad = request.form.get('edad', type=int)
+        tiempo_espera = request.form.get('tiempo_espera', type=int)
+        citas_previas = request.form.get('citas_previas', type=int)
+        dia_semana = request.form.get('dia_semana')
+        
+        if all(v is not None for v in [edad, tiempo_espera, citas_previas, dia_semana]):
+            resultado, probabilidad = modelo_logistico.predecir_asistencia(
+                edad, tiempo_espera, citas_previas, dia_semana
+            )
+            
+            # Generar matriz de confusión
+            buffer = io.BytesIO()
+            modelo_logistico.plot_confusion_matrix()
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            matriz_confusion_img = base64.b64encode(buffer.getvalue()).decode()
+            plt.close()
+            
+            # Generar curva ROC
+            buffer = io.BytesIO()
+            modelo_logistico.plot_roc_curve()
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            curva_roc_img = base64.b64encode(buffer.getvalue()).decode()
+            plt.close()
+            
+    return render_template('regresion_logistica.html',
+                         resultado=resultado,
+                         probabilidad=probabilidad,
+                         matriz_confusion_img=matriz_confusion_img,
+                         curva_roc_img=curva_roc_img)
 
 if __name__ == '__main__':
     app.run(debug=True)
