@@ -12,7 +12,6 @@ from sklearn.linear_model import LogisticRegression
 import joblib
 
 # --- 1. Creación de un Conjunto de Datos Simulado ---
-# En un caso real, cargarías tus datos desde un archivo (ej: pd.read_csv('citas.csv'))
 np.random.seed(42) # Para reproducibilidad
 n_muestras = 500
 
@@ -26,7 +25,6 @@ datos = {
 df = pd.DataFrame(datos)
 
 # Ajustar la variable 'Asistio' para que tenga más sentido con las otras variables
-# Por ejemplo, mayor tiempo de espera o ser más joven podría aumentar la probabilidad de no asistir.
 df['Asistio'] = df.apply(
     lambda row: 0 if (row['TiempoEspera'] > 90 or row['Edad'] < 18 and row['CitasPrevias'] < 2) else row['Asistio'],
     axis=1
@@ -39,7 +37,7 @@ df.info()
 
 
 # --- 2. Separación de Datos y Preprocesamiento ---
-# Variable objetivo (y) y características (X)
+
 X = df.drop('Asistio', axis=1)
 y = df['Asistio']
 
@@ -61,7 +59,6 @@ X_entrena, X_prueba, y_entrena, y_prueba = train_test_split(X, y, test_size=0.2,
 
 
 # --- 3. Creación y Entrenamiento del Modelo ---
-# Se usará un Pipeline para encadenar el preprocesamiento y el modelo
 # Esto evita la fuga de datos y simplifica el código.
 modelo_logistico = Pipeline(steps=[
     ('preprocesador', preprocesador),
@@ -75,7 +72,6 @@ print("¡Modelo entrenado!")
 
 
 # --- 4. Evaluación del Modelo ---
-# Realizar predicciones en el conjunto de prueba
 y_pred = modelo_logistico.predict(X_prueba)
 y_pred_proba = modelo_logistico.predict_proba(X_prueba)[:, 1] # Probabilidades para la clase '1' (Asistió)
 
