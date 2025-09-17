@@ -12,39 +12,33 @@
       <h2 class="text-center mb-4">Conceptos básicos de Regresión Logística</h2>
       <div class="bg-dark p-4 rounded">
         <h4>Definición</h4>
+
         <p>
-          La regresión logística es un método estadístico para predecir una variable categórica binaria basándose en una o más variables predictoras. Se utiliza principalmente para problemas de clasificación binaria donde la variable de salida tiene dos posibles resultados (0 o 1, sí o no, verdadero o falso).
+          La regresión logística es un modelo que se utiliza cuando la variable que queremos predecir solo tiene dos posibles resultados, como sí/no, 0/1 o verdadero/falso
         </p>
-        <h4>Supuestos principales</h4>
-        <ul>
-          <li><strong>Variable dependiente binaria:</strong> La variable objetivo debe ser dicotómica (dos categorías). Por ejemplo: asistió/no asistió, aprobó/no aprobó, compró/no compró.</li>
-          <li><strong>Independencia de observaciones:</strong> Las observaciones deben ser independientes entre sí. Cada registro debe representar un evento único y no estar relacionado con otros registros.</li>
-          <li><strong>Ausencia de multicolinealidad:</strong> Las variables predictoras no deben estar altamente correlacionadas entre sí, ya que esto puede afectar la estabilidad y la interpretabilidad del modelo.</li>
-          <li><strong>Tamaño de muestra:</strong> Se requiere un número suficiente de casos para cada categoría. Se recomienda tener al menos 50 observaciones por variable predictora.</li>
-          <li><strong>Relación lineal:</strong> Debe existir una relación lineal entre las variables independientes y el logit de la variable dependiente.</li>
-        </ul>
-        <h4>Aplicaciones comunes</h4>
-        <ul>
-          <li>Predicción de riesgo en medicina (probabilidad de que un paciente tenga una enfermedad)</li>
-          <li>Detección de fraude en transacciones bancarias</li>
-          <li>Predicción de asistencia a citas médicas</li>
-          <li>Análisis de riesgo crediticio</li>
-          <li>Predicción de deserción de clientes</li>
-          <li>Clasificación de correos electrónicos (spam/no spam)</li>
-        </ul>
-        <p><strong>Ejemplo encontrado:</strong> Sistema de predicción de asistencia a citas médicas basado en factores como edad, historial de citas previas y tiempo de espera.</p>
-        <p><strong>Referencias:</strong></p>
+        <p>
+          Lo que hace este modelo es tomar varias variables independientes combinarlas de forma lineal y luego aplicar una función llamada logit que transforma esa combinación en un valor real
+        </p>
+        <p>
+          Después se usa la función sigmoide para convertir ese valor en una probabilidad entre 0 y 1 lo que nos permite interpretar el resultado como la probabilidad de que ocurra uno de los dos posibles eventos.
+        </p>
+        <p>
+          Según la documentación de Scikit-learn (2023) esta transformación permite modelar la probabilidad de pertenencia a una clase binaria de forma precisa y GeeksforGeeks (2023) lo presenta como una herramienta útil para problemas como detección de fraude o predicción médica.
+        </p>
+        <p>
+          Brixius (2016) explica que el logit convierte probabilidades en valores reales y la sigmoide hace el trabajo inverso es decir devolviéndolos al rango [0, 1] Además Chawla (2023) dice que el uso de la sigmoide en este modelo tiene una base matemática sólida derivada de la probabilidad condicional en distribuciones Bernoulli.
+        </p>
+
+        <h4>Referencias</h4>
         <ul class="references-list">
-          <li>Hosmer Jr, D. W., Lemeshow, S., & Sturdivant, R. X. (2013). <em>Applied logistic regression</em>.</li>
-          <li>IBM. (2023). <em>Regresión logística</em>.
-            <a href="https://www.ibm.com/topics/logistic-regression" target="_blank" rel="noopener">https://www.ibm.com/topics/logistic-regression</a>
-          </li>
-          <li>Scikit-learn. (2023). <em>Logistic Regression</em>.
-            <a href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression</a>
-          </li>
+          <li>Brixius, N. (2016, June 4). <em>The Logit and Sigmoid Functions</em>. Nathan Brixius. <a href="https://nathanbrixius.wordpress.com/2016/06/04/functions-i-have-known-logit-and-sigmoid/" target="_blank" rel="noopener">https://nathanbrixius.wordpress.com/2016/06/04/functions-i-have-known-logit-and-sigmoid/</a></li>
+          <li>Chawla, A. (2023, August 8). <em>Why do we use sigmoid in logistic regression?</em> Daily Dose of Data Science. <a href="https://www.dailydoseofds.com/why-do-we-use-sigmoid-in-logistic-regression/" target="_blank" rel="noopener">https://www.dailydoseofds.com/why-do-we-use-sigmoid-in-logistic-regression/</a></li>
+          <li>GeeksforGeeks. (2023). <em>Binary Variables – Pattern Recognition and Machine Learning</em>. <a href="https://www.geeksforgeeks.org/machine-learning/binary-variables-pattern-recognition-and-machine-learning/" target="_blank" rel="noopener">https://www.geeksforgeeks.org/machine-learning/binary-variables-pattern-recognition-and-machine-learning/</a></li>
+          <li>Scikit-learn. (2023). <em>Logistic Regression</em>. <a href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression</a></li>
         </ul>
+
+        <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
       </div>
-      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
     </div>
   </body>
 </html>
