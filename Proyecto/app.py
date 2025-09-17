@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
-import LinearRegression601T
+import Script_MDA.LinearRegression601T as LinearRegression601T
+import Script_MDA.regresionLogistica as regresionLogistica
 
 app = Flask(__name__)
 
