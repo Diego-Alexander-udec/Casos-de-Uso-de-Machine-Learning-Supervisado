@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conceptos básicos - Regresión Lineal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="fondo-personalizado text-white">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Conceptos básicos de Regresión Lineal</h2>
+      <div class="bg-dark p-4 rounded">
+        <h4>Definición</h4>
+        <p>
+          La regresión lineal es un método estadístico utilizado para modelar la relación entre una variable dependiente y una o más variables independientes, asumiendo que esta relación es lineal.
+        </p>
+        <h4>Supuestos habituales</h4>
+        <ul>
+          <li><strong>Linealidad:</strong> En el conjunto de datos a analizar debe existir una relación lineal, es decir entre la variable independiente X y la variable dependiente Y, los analistas crean un gráfico de dispersión para verificar si los valores caen a lo largo de una línea recta, de lo contrario se pueden aplicar funciones no lineales para crear matemáticamente la relación lineal entre las variables </li>
+          <li><strong>Independencia:</strong> La independencia residual es la que utilizan los analistas para medir la precisión de la predicción mediante un residuo, el residuo es la diferencia entre los datos observados y el valor esperado, los residuos no deben seguir algún patrón en específico, se puede utilizar diferentes pruebas matemáticas como la de Durbin-Watson para determinar la independencia residual </li>
+          <li><strong>Homocedasticidad:</strong> Se dice que los residuos tienen una variación constante o desviación estándar de la media para cada valor de X, de lo contrario es posible que el resultado del análisis no sea preciso, sino se cumple esta suposición es posible que se tenga que cambiar la variable dependiente ya que la variación se produce de manera natural.</li>
+          <li><strong>Normalidad del error:</strong>Al momento de graficar esto nos puede ayudar a verificar si los residuos se distribuyen normalmente, los residuos deben caer a lo largo de una línea diagonal en el centro de la gráfica, sino están normalizados se prueban los datos para detectar valores atípicos aleatorios o valores que no sean típicos.</li>
+        </ul>
+        <p><strong>Ejemplo encontrado:</strong> Sistema de clasificación automática de correos que categoriza y genera respuestas personalizadas basadas en el contenido.</p>
+                        <p><strong>Referencias:</strong></p>
+                        <ul class="references-list">
+
+                        </ul>
+                        <ul class="references-list">
+                           <li>Amazon Web Services (AWS). (s.f.). <em>¿Qué es la regresión lineal?</em>.
+                             <a href="https://aws.amazon.com/es/what-is/linear-regression/" target="_blank" rel="noopener">https://aws.amazon.com/es/what-is/linear-regression/</a>
+                           </li>
+                             <li>acastro. (2014). <em>Supuestos de la Regresión Lineal</em>.
+                              <a href="https://rpubs.com/acastro/regresion_lineal_supuestos" target="_blank" rel="noopener">https://rpubs.com/acastro/regresion_lineal_supuestos</a>
+                           </li>
+                            <li>IBM. (2021). <em>Regresión lineal</em>.
+                               <a href="https://www.ibm.com/es-es/think/topics/linear-regression" target="_blank" rel="noopener">https://www.ibm.com/es-es/think/topics/linear-regression</a>
+                            </li>
+                        </ul>
+      </div>
+      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
+    </div>
+  </body>
+</html>
