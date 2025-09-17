@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-import Proyecto.Script_MDA.LinearRegression601T as LinearRegression601T
-import Proyecto.Script_MDA.LogisticRegression as LogisticRegression601T
+import Script_MDA.LinearRegression601T as LinearRegression601T
+import Script_MDA.LogisticRegression as LogisticRegression601T
 
 app = Flask(__name__)
 
@@ -38,7 +38,8 @@ def regresion_lineal():
         dia_semana = request.form.get('dia_semana', type=int)
         if temperatura is not None and dia_semana is not None:
             resultado = LinearRegression601T.EstimarVentasHelados(temperatura, dia_semana)
-    LinearRegression601T.generar_grafica(temperatura, dia_semana, resultado)
+            LinearRegression601T.generar_grafica(temperatura, dia_semana, resultado)
+            # LinearRegression601T.generar_grafica(temperatura, dia_semana, resultado)
     return render_template('regresion_lineal.html', resultado=resultado)
 
 if __name__ == '__main__':
