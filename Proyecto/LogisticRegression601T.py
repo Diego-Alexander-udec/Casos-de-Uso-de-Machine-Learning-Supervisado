@@ -183,6 +183,21 @@ class ModeloLogistico:
         plt.ylabel('Tasa de Verdaderos Positivos (TPR)')
         plt.title('Curva ROC')
         plt.legend(loc='lower right')
+        
+    def obtener_metricas_evaluacion(self):
+        y_pred = self.modelo.predict(self.X_test)
+        accuracy = accuracy_score(self.y_test, y_pred)
+        report = classification_report(self.y_test, y_pred, target_names=['No Asistió', 'Sí Asistió'], output_dict=True)
+        
+        return round(accuracy * 100, 2), report
+
+    def obtener_descripcion_dataset(self):
+        # Usamos el DataFrame original antes de la división para la descripción
+        descripcion = {
+            'head': df.head().to_html(classes='table table-dark table-striped', index=False),
+            'info': df.info(verbose=False) # Esto no se puede pasar directamente, lo procesaremos en app.py
+        }
+        return descripcion
 
 # Crear instancia global del modelo
 modelo_logistico = ModeloLogistico()
