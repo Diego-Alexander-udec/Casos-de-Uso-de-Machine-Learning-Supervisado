@@ -135,3 +135,270 @@
     margin-left: 1.25rem;
     padding-left: 0;
 }
+
+/* Estilos para mapa de conceptos de clasificación */
+.mapa-bootstrap {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.mapa-bootstrap::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+    background-size: 50px 50px;
+    pointer-events: none;
+}
+
+.mapa-bootstrap iframe {
+    flex: 1 1 auto;
+    width: 95vw;
+    height: 65vh;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 
+        0 20px 40px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(255,255,255,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    margin-bottom: 0;
+    background: rgba(255,255,255,0.95);
+    transition: all 0.3s ease;
+    z-index: 10;
+    position: relative;
+}
+
+.mapa-bootstrap iframe:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 25px 50px rgba(0,0,0,0.5),
+        0 0 0 1px rgba(255,255,255,0.2),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.referencias-bootstrap {
+    width: 100vw;
+    background: #f8f9fa;
+    color: #222;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    text-align: left;
+    box-shadow: 0 -2px 10px #ccc;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    max-height: 35vh;
+    overflow-y: auto;
+}
+
+.referencias-bootstrap::-webkit-scrollbar {
+    width: 8px;
+}
+
+.referencias-bootstrap::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+.referencias-bootstrap::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+
+.referencias-bootstrap::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.5);
+}
+
+.referencias-bootstrap .referencias-title {
+    color: #222;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.referencias-bootstrap .referencias-text {
+    color: #222;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.referencias-bootstrap ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.referencias-bootstrap li {
+    margin-bottom: 10px;
+    padding: 10px;
+    color: #222;
+}
+
+.referencias-bootstrap li:hover {
+    color: #333;
+}
+
+.referencias-bootstrap a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.referencias-bootstrap a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Botón toggle para referencias */
+.referencias-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 25;
+}
+
+.referencias-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 123, 255, 0.4);
+    background: #0056b3;
+}
+
+.referencias-toggle:active {
+    transform: translateY(-1px);
+}
+
+/* Botón de inicio */
+.home-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 25;
+}
+
+.home-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(64, 62, 189, 0.4);
+    background: #4365d4;
+}
+
+.home-button:active {
+    transform: translateY(-1px);
+}
+
+/* Animación para mostrar/ocultar referencias */
+.referencias-bootstrap.hidden {
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.referencias-bootstrap.visible {
+    transform: translateY(0);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estilos para la lista de referencias simplificada */
+.referencias-list {
+    margin-top: 15px;
+}
+
+.referencia-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #ffffff;
+    border-radius: 5px;
+    border-left: 3px solid #007bff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.referencia-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.referencia-item strong {
+    color: #222;
+}
+
+.referencia-item em {
+    color: #666;
+    font-style: italic;
+}
+
+.referencia-item a {
+    color: #007bff;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.referencia-item a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Estilos específicos para el iframe del mapa conceptual */
+.mapa-conceptual-page {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.mapa-conceptual-page html,
+.mapa-conceptual-page body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Centrar gráficas en las páginas */
+.chart-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.chart-center img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para referencias */
+.referencias-title {
+    font-size: 2.5rem;
+}
+
+.referencias-text {
+    font-size: 1.5rem;
+}
