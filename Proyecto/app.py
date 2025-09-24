@@ -43,6 +43,10 @@ def conceptos_regresionLogistica():
 def conceptos_clasificacion():
     return render_template('conceptos_clasificacion.html')
 
+@app.route('/conceptos_teoricos_clasificacion')
+def conceptos_teoricos_clasificacion():
+    return render_template('conceptos_teoricos_clasificacion.html')
+
 @app.route('/regresion_lineal', methods=['GET', 'POST'])
 def regresion_lineal():
     resultado = None
@@ -175,3 +179,4 @@ def caso_practico_clasificacion():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
