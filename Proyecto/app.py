@@ -5,6 +5,7 @@ import base64
 import matplotlib.pyplot as plt 
 import matplotlib
 from LogisticRegression601T import modelo_logistico
+from perceptron_senales_industriales_mejorado import PerceptronClassifier
 
 matplotlib.use('Agg')  # Configurar el backend de matplotlib para uso sin interfaz gráfica
 app = Flask(__name__)
@@ -116,6 +117,55 @@ def regresion_logistica():
 def caso_practico_clasificacion():
     # Aquí va la lógica para métricas, formulario y resultados
     return render_template('caso_practico_clasificacion.html')
+    resultado_prediccion = None
+    probabilidad = None
+    metricas = None
+    matriz_confusion_img = None
+    errores_entrenamiento_img = None
+    
+    # Instanciar el clasificador. Se entrenará si se envía el formulario.
+    classifier = PerceptronClassifier(eta=0.1, n_iter=1000, random_state=42)
+
+    if request.method == 'POST':
+        voltaje = request.form.get('voltaje', type=float)
+        frecuencia = request.form.get('frecuencia', type=float)
+        duracion = request.form.get('duracion', type=float)
+        tasa_cambio = request.form.get('tasa_cambio', type=float)
+
+        if all(v is not None for v in [voltaje, frecuencia, duracion, tasa_cambio]):
+            # 1. Entrenar el modelo
+            classifier.train()
+
+            # 2. Realizar la predicción
+            features = [voltaje, frecuencia, duracion, tasa_cambio]
+            resultado_prediccion, probabilidad = classifier.predict_label(features)
+            probabilidad = round(probabilidad * 100, 2) # Convertir a porcentaje
+
+            # 3. Evaluar y obtener métricas
+            metricas = classifier.evaluate()
+
+            # 4. Generar gráfica de Matriz de Confusión
+            buffer_cm = io.BytesIO()
+            classifier._plot_confusion_matrix(metricas['confusion_matrix'])
+            plt.savefig(buffer_cm, format='png', bbox_inches='tight')
+            buffer_cm.seek(0)
+            matriz_confusion_img = base64.b64encode(buffer_cm.getvalue()).decode()
+            plt.close()
+
+            # 5. Generar gráfica de Errores de Entrenamiento
+            buffer_err = io.BytesIO()
+            classifier._plot_training_errors()
+            plt.savefig(buffer_err, format='png', bbox_inches='tight')
+            buffer_err.seek(0)
+            errores_entrenamiento_img = base64.b64encode(buffer_err.getvalue()).decode()
+            plt.close()
+
+    return render_template('caso_practico_clasificacion.html',
+                           resultado=resultado_prediccion,
+                           probabilidad=probabilidad,
+                           metricas=metricas,
+                           matriz_confusion_img=matriz_confusion_img,
+                           errores_entrenamiento_img=errores_entrenamiento_img)
 
 if __name__ == '__main__':
     app.run(debug=True)
