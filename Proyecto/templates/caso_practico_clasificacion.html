@@ -19,6 +19,47 @@
                     Utiliza nuestro modelo Perceptrón para predecir el estado de un sistema industrial basado en sus señales eléctricas.
                 </p>
 
+                <!-- Descripción del Dataset -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card bg-dark border-primary shadow-lg">
+                            <div class="card-header">
+                                <h4><i class="fas fa-database"></i> Descripción del Dataset - Señales Eléctricas Industriales</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5><i class="fas fa-cog"></i> Variables del Dataset</h5>
+                                        <div class="alert alert-info">
+                                            <p><strong>Variables Numéricas (requieren escalado estándar):</strong></p>
+                                            <ul>
+                                                <li><strong>Voltaje Promedio (V):</strong> Tensión media de la señal eléctrica</li>
+                                                <li><strong>Frecuencia (Hz):</strong> Oscilaciones por segundo de la señal</li>
+                                                <li><strong>Duración Señal (ms):</strong> Tiempo de medición de la señal</li>
+                                                <li><strong>Tasa de Cambio (V/s):</strong> Velocidad de variación del voltaje</li>
+                                            </ul>
+                                            <p><strong>Variables Categóricas:</strong> No aplica (todas son numéricas)</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5><i class="fas fa-bullseye"></i> Clase Objetivo</h5>
+                                        <div class="alert alert-success">
+                                            <p><strong>Clase Positiva (1):</strong> Sistema Encendido/Funcionando</p>
+                                            <p><strong>Clase Negativa (0):</strong> Sistema Apagado/Defectuoso</p>
+                                            <hr>
+                                            <p><strong>Distribución típica:</strong></p>
+                                            <ul>
+                                                <li>Sistema Encendido: Voltaje alto (~220V), frecuencia estable (~50Hz)</li>
+                                                <li>Sistema Apagado: Voltaje bajo (~50V), frecuencia variable (~30Hz)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Formulario de predicción -->
                 <div class="row mb-4">
                     <div class="col-lg-8 mx-auto">
@@ -98,40 +139,74 @@
 
                 <!-- Métricas y Visualizaciones -->
                 {% if metricas %}
+                
+                <!-- Exactitud destacada en tarjeta grande -->
                 <div class="row mb-4">
-                    <!-- Métricas de evaluación -->
+                    <div class="col-12">
+                        <div class="card bg-gradient-primary border-0 shadow-lg text-white">
+                            <div class="card-body text-center py-5">
+                                <h2 class="card-title mb-3"><i class="fas fa-bullseye"></i> Exactitud del Modelo</h2>
+                                <div class="display-3 fw-bold mb-3">{{ "%.2f"|format(metricas.accuracy * 100) }}%</div>
+                                <p class="lead">El modelo Perceptrón predice correctamente el <strong>{{ "%.2f"|format(metricas.accuracy * 100) }}%</strong> de los casos de prueba</p>
+                                <div class="row mt-4">
+                                    <div class="col-md-4">
+                                        <i class="fas fa-database fa-2x mb-2"></i>
+                                        <p><strong>Datos de prueba evaluados</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <i class="fas fa-brain fa-2x mb-2"></i>
+                                        <p><strong>Algoritmo: Perceptrón</strong></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                        <p><strong>Clasificación binaria</strong></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <!-- Reporte de clasificación en tabla HTML -->
                     <div class="col-lg-6 mb-4">
                         <div class="card bg-dark border-warning h-100 shadow regression-card">
                             <div class="card-header">
-                                <h5><i class="fas fa-chart-bar"></i> Rendimiento del Modelo</h5>
+                                <h5><i class="fas fa-table"></i> Reporte de Clasificación</h5>
                             </div>
                             <div class="card-body">
-                                <div class="alert alert-info text-center mb-3">
-                                    <h6><i class="fas fa-target"></i> Exactitud: <strong>{{ "%.2f"|format(metricas.accuracy * 100) }}%</strong></h6>
-                                    <small class="text-muted">El modelo predice correctamente el {{ "%.2f"|format(metricas.accuracy * 100) }}% de los casos de prueba.</small>
-                                </div>
                                 <div class="table-responsive">
-                                    <table class="table table-dark table-sm">
-                                        <thead class="table-info">
+                                    <table class="table table-dark table-striped">
+                                        <thead class="table-warning">
                                             <tr>
-                                                <th class="small">Clase</th>
-                                                <th class="small">Precisión</th>
-                                                <th class="small">Recall</th>
-                                                <th class="small">F1-Score</th>
+                                                <th>Clase</th>
+                                                <th>Precisión</th>
+                                                <th>Recall</th>
+                                                <th>F1-Score</th>
+                                                <th>Soporte</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="small"><span class="badge bg-danger">❌</span> Apagado (No)</td>
-                                                <td class="small">{{ "%.2f"|format(metricas.precision_No) }}</td>
-                                                <td class="small">{{ "%.2f"|format(metricas.recall_No) }}</td>
-                                                <td class="small">{{ "%.2f"|format(metricas.f1_No) }}</td>
+                                                <td><span class="badge bg-danger">0</span> Apagado (No)</td>
+                                                <td>{{ "%.3f"|format(metricas.precision_No) }}</td>
+                                                <td>{{ "%.3f"|format(metricas.recall_No) }}</td>
+                                                <td>{{ "%.3f"|format(metricas.f1_No) }}</td>
+                                                <td>{{ metricas.support_No }}</td>
                                             </tr>
                                             <tr>
-                                                <td class="small"><span class="badge bg-success">✅</span> Encendido (Sí)</td>
-                                                <td class="small">{{ "%.2f"|format(metricas.precision_Sí) }}</td>
-                                                <td class="small">{{ "%.2f"|format(metricas.recall_Sí) }}</td>
-                                                <td class="small">{{ "%.2f"|format(metricas.f1_Sí) }}</td>
+                                                <td><span class="badge bg-success">1</span> Encendido (Sí)</td>
+                                                <td>{{ "%.3f"|format(metricas.precision_Sí) }}</td>
+                                                <td>{{ "%.3f"|format(metricas.recall_Sí) }}</td>
+                                                <td>{{ "%.3f"|format(metricas.f1_Sí) }}</td>
+                                                <td>{{ metricas.support_Sí }}</td>
+                                            </tr>
+                                            <tr class="table-info">
+                                                <td><strong>Promedio</strong></td>
+                                                <td><strong>{{ "%.3f"|format((metricas.precision_No + metricas.precision_Sí) / 2) }}</strong></td>
+                                                <td><strong>{{ "%.3f"|format((metricas.recall_No + metricas.recall_Sí) / 2) }}</strong></td>
+                                                <td><strong>{{ "%.3f"|format((metricas.f1_No + metricas.f1_Sí) / 2) }}</strong></td>
+                                                <td><strong>{{ metricas.support_No + metricas.support_Sí }}</strong></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -140,16 +215,22 @@
                         </div>
                     </div>
 
-                    <!-- Matriz de Confusión -->
+                    <!-- Matriz de Confusión 2x2 con encabezados claros -->
                     <div class="col-lg-6 text-center mb-4">
                         <div class="card bg-dark border-info h-100 shadow regression-card">
                             <div class="card-header">
-                                <h6><i class="fas fa-table"></i> Matriz de Confusión</h6>
+                                <h5><i class="fas fa-th"></i> Matriz de Confusión 2×2</h5>
                             </div>
                             <div class="card-body d-flex flex-column justify-content-center">
-                                <p class="text-muted small">Muestra la precisión de las predicciones del modelo en el conjunto de prueba.</p>
+                                <p class="text-muted small">Imagen con encabezados claros: <strong>Real 0/1 vs Predicho 0/1</strong></p>
                                 <div class="chart-container">
-                                    <img src="data:image/png;base64,{{ matriz_confusion_img }}" alt="Matriz de confusión" class="img-fluid rounded border">
+                                    <img src="data:image/png;base64,{{ matriz_confusion_img }}" alt="Matriz de confusión 2x2 con encabezados Real vs Predicho" class="img-fluid rounded border">
+                                </div>
+                                <div class="mt-3">
+                                    <small class="text-info">
+                                        <i class="fas fa-info-circle"></i> 
+                                        Filas: Valores Reales | Columnas: Predicciones del Modelo
+                                    </small>
                                 </div>
                             </div>
                         </div>

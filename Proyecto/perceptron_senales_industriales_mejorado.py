@@ -333,29 +333,31 @@ class PerceptronClassifier:
         return label, round(probability, 4)
     
     def _plot_confusion_matrix(self, cm):
-        """Graficar matriz de confusión"""
+        """Graficar matriz de confusión - optimizada para web"""
         plt.figure(figsize=(8, 6))
         sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-                   xticklabels=['No (Predicho)', 'Sí (Predicho)'],
-                   yticklabels=['No (Real)', 'Sí (Real)'])
-        plt.title('Matriz de Confusión 2×2\n(Filas=Reales, Columnas=Predichos)')
+                   xticklabels=['Apagado (0)', 'Encendido (1)'],
+                   yticklabels=['Apagado (0)', 'Encendido (1)'])
+        plt.title('Matriz de Confusión - Clasificación de Señales Eléctricas\n(Filas = Real, Columnas = Predicho)', 
+                 fontsize=14, fontweight='bold')
         plt.ylabel('Valores Reales')
-        plt.xlabel('Predicciones')
+        plt.xlabel('Predicciones del Modelo')
         plt.tight_layout()
-        plt.show()
+        # No usar plt.show() en aplicación web
     
     def _plot_training_errors(self):
-        """Graficar evolución de errores durante entrenamiento"""
+        """Graficar evolución de errores durante entrenamiento - optimizada para web"""
         if hasattr(self.perceptron, 'errors_'):
             plt.figure(figsize=(10, 6))
             plt.plot(range(1, len(self.perceptron.errors_) + 1), self.perceptron.errors_, 
-                    marker='o', linewidth=2, markersize=6)
+                    marker='o', linewidth=2, markersize=6, color='#2E86C1')
             plt.xlabel('Época')
             plt.ylabel('Número de Errores')
-            plt.title('Evolución de Errores Durante el Entrenamiento')
+            plt.title('Evolución de Errores Durante el Entrenamiento del Perceptrón', 
+                     fontsize=14, fontweight='bold')
             plt.grid(True, alpha=0.3)
             plt.tight_layout()
-            plt.show()
+            # No usar plt.show() en aplicación web
 
 
 # Funciones auxiliares para compatibilidad y demostración

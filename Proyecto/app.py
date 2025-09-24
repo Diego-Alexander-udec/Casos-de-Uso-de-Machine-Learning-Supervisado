@@ -8,6 +8,7 @@ import base64
 import matplotlib.pyplot as plt 
 from LogisticRegression601T import modelo_logistico
 from perceptron_senales_industriales_mejorado import PerceptronClassifier
+import time
 
 app = Flask(__name__)
 
@@ -89,24 +90,27 @@ def regresion_logistica():
                 edad, tiempo_espera, citas_previas, dia_semana
             )
             
-            # Generar matriz de confusión
+            # Generar matriz de confusión con mejor calidad
             buffer = io.BytesIO()
             modelo_logistico.plot_confusion_matrix()
-            plt.savefig(buffer, format='png')
+            plt.savefig(buffer, format='png', dpi=150, facecolor='white', bbox_inches='tight')
             buffer.seek(0)
             matriz_confusion_img = base64.b64encode(buffer.getvalue()).decode()
             plt.close()
             
-            # Generar curva ROC
+            # Generar curva ROC con mejor calidad
             buffer = io.BytesIO()
             modelo_logistico.plot_roc_curve()
-            plt.savefig(buffer, format='png')
+            plt.savefig(buffer, format='png', dpi=150, facecolor='white', bbox_inches='tight')
             buffer.seek(0)
             curva_roc_img = base64.b64encode(buffer.getvalue()).decode()
             plt.close()
 
             # Obtener exactitud y reporte de clasificación
             accuracy, class_report = modelo_logistico.obtener_metricas_evaluacion()
+
+    # Timestamp para cache busting
+    timestamp = int(time.time())
             
     return render_template('regresion_logistica.html',
                          resultado=resultado,
@@ -116,7 +120,8 @@ def regresion_logistica():
                          accuracy=accuracy,
                          class_report=class_report,
                          dataset_head=dataset_head,
-                         dataset_info=dataset_info)
+                         dataset_info=dataset_info,
+                         timestamp=timestamp)
 
 @app.route('/caso_practico_clasificacion', methods=['GET', 'POST'])
 def caso_practico_clasificacion():
@@ -151,18 +156,18 @@ def caso_practico_clasificacion():
             # 3. Evaluar y obtener métricas
             metricas = classifier.evaluate()
 
-            # 4. Generar gráfica de Matriz de Confusión
+            # 4. Generar gráfica de Matriz de Confusión con cache busting
             buffer_cm = io.BytesIO()
             classifier._plot_confusion_matrix(metricas['confusion_matrix'])
-            plt.savefig(buffer_cm, format='png', bbox_inches='tight')
+            plt.savefig(buffer_cm, format='png', bbox_inches='tight', dpi=150, facecolor='white')
             buffer_cm.seek(0)
             matriz_confusion_img = base64.b64encode(buffer_cm.getvalue()).decode()
             plt.close()
 
-            # 5. Generar gráfica de Errores de Entrenamiento
+            # 5. Generar gráfica de Errores de Entrenamiento con cache busting
             buffer_err = io.BytesIO()
             classifier._plot_training_errors()
-            plt.savefig(buffer_err, format='png', bbox_inches='tight')
+            plt.savefig(buffer_err, format='png', bbox_inches='tight', dpi=150, facecolor='white')
             buffer_err.seek(0)
             errores_entrenamiento_img = base64.b64encode(buffer_err.getvalue()).decode()
             plt.close()
@@ -170,12 +175,16 @@ def caso_practico_clasificacion():
             # Restaurar la salida estándar
             sys.stdout = original_stdout
 
+    # Timestamp para cache busting
+    timestamp = int(time.time())
+
     return render_template('caso_practico_clasificacion.html',
                            resultado=resultado_prediccion,
                            probabilidad=probabilidad,
                            metricas=metricas,
                            matriz_confusion_img=matriz_confusion_img,
-                           errores_entrenamiento_img=errores_entrenamiento_img)
+                           errores_entrenamiento_img=errores_entrenamiento_img,
+                           timestamp=timestamp)
 
 if __name__ == '__main__':
     app.run(debug=True)
