@@ -69,7 +69,7 @@ def regresion_logistica():
     
     # Capturar la salida de df.info() para mostrarla en HTML
     buf = io.StringIO()
-    modelo_logistico.df.info(buf=buf)
+    modelo_logistico.df_original.info(buf=buf)
     dataset_info = buf.getvalue()
 
     if request.method == 'POST':

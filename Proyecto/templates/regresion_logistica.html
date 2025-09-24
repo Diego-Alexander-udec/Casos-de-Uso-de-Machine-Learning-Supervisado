@@ -5,117 +5,283 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Regresión Logística - Predicción de Asistencia</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body class="fondo-personalizado text-white">
-    <div class="container mt-5">
-      <h2 class="text-center mb-4">Predicción de Asistencia a Citas Médicas</h2>
-      <form method="post" class="mb-4">
-        <div class="mb-3">
-          <label for="edad" class="form-label">Edad:</label>
-          <input type="number" class="form-control" id="edad" name="edad" required>
-        </div>
-        <div class="mb-3">
-          <label for="tiempo_espera" class="form-label">Tiempo de espera (días):</label>
-          <input type="number" class="form-control" id="tiempo_espera" name="tiempo_espera" required>
-        </div>
-        <div class="mb-3">
-          <label for="citas_previas" class="form-label">Número de citas previas:</label>
-          <input type="number" class="form-control" id="citas_previas" name="citas_previas" required>
-        </div>
-        <div class="mb-3">
-          <label for="dia_semana" class="form-label">Día de la semana:</label>
-          <select class="form-control" id="dia_semana" name="dia_semana" required>
-            <option value="Lunes">Lunes</option>
-            <option value="Martes">Martes</option>
-            <option value="Miercoles">Miércoles</option>
-            <option value="Jueves">Jueves</option>
-            <option value="Viernes">Viernes</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-secondary">Predecir</button>
-      </form>
+    <div class="container-fluid mt-4">
+      <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+          <h1 class="text-center mb-4">
+            <i class="fas fa-chart-line"></i> Predicción de Asistencia a Citas Médicas
+          </h1>
+          <p class="text-center mb-4">
+            Utiliza nuestro modelo de regresión logística para predecir la probabilidad de asistencia a citas médicas
+          </p>
 
-      {% if resultado is not none %}
-        <div class="alert alert-success text-center">
-          <strong>Predicción:</strong> {% if resultado == 1 %}Asistirá{% else %}No asistirá{% endif %}
-          <br>
-          <strong>Probabilidad de asistencia:</strong> {{ probabilidad }}%
-        </div>
-      {% endif %}
-
-      <div class="mb-4">
-        <strong>Explicación del modelo:</strong>
-        <p>
-          Este modelo utiliza regresión logística para predecir la probabilidad de que un paciente asista a su cita médica
-          basándose en factores como la edad, tiempo de espera, historial de citas y día de la semana.
-        </p>
-      </div>
-
-      {% if dataset_head and dataset_info %}
-      <div class="mb-4">
-        <h4 class="text-center">Descripción del Conjunto de Datos (Datasheet)</h4>
-        <p>
-          El modelo fue entrenado con un conjunto de datos simulado que contiene las siguientes características:
-        </p>
-        <h5>Primeras 5 filas del dataset:</h5>
-        <div class="table-responsive">
-          {{ dataset_head|safe }}
-        </div>
-        <h5 class="mt-3">Información del dataset:</h5>
-        <pre class="bg-dark p-3 rounded text-white"><code>{{ dataset_info }}</code></pre>
-      </div>
-      {% endif %}
-
-      {% if accuracy is not none and class_report is not none %}
-        <div class="mb-4">
-          <h4 class="text-center">Métricas de Evaluación del Modelo</h4>
-          <div class="alert alert-info">
-            <strong>Exactitud (Accuracy):</strong> {{ accuracy }}%
+          <!-- Formulario de predicción -->
+          <div class="row mb-4">
+            <div class="col-lg-8 mx-auto">
+              <div class="card bg-dark border-secondary shadow-lg regression-card regression-form-card">
+                <div class="card-header">
+                  <h4><i class="fas fa-user-md"></i> Datos del Paciente</h4>
+                </div>
+                <div class="card-body p-4">
+                  <form method="post">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="mb-3">
+                          <label for="edad" class="form-label">
+                            <i class="fas fa-birthday-cake"></i> Edad:
+                          </label>
+                          <input type="number" class="form-control form-control-lg" id="edad" name="edad" 
+                                 min="1" max="120" required placeholder="Ejemplo: 35">
+                          <small class="form-text text-muted">Edad del paciente en años</small>
+                        </div>
+                        <div class="mb-3">
+                          <label for="tiempo_espera" class="form-label">
+                            <i class="fas fa-clock"></i> Tiempo de espera (días):
+                          </label>
+                          <input type="number" class="form-control form-control-lg" id="tiempo_espera" name="tiempo_espera" 
+                                 min="0" max="365" required placeholder="Ejemplo: 15">
+                          <small class="form-text text-muted">Días desde que se solicitó la cita</small>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="mb-3">
+                          <label for="citas_previas" class="form-label">
+                            <i class="fas fa-history"></i> Número de citas previas:
+                          </label>
+                          <input type="number" class="form-control form-control-lg" id="citas_previas" name="citas_previas" 
+                                 min="0" max="50" required placeholder="Ejemplo: 4">
+                          <small class="form-text text-muted">Historial de citas del paciente</small>
+                        </div>
+                        <div class="mb-3">
+                          <label for="dia_semana" class="form-label">
+                            <i class="fas fa-calendar-alt"></i> Día de la semana:
+                          </label>
+                          <select class="form-control form-control-lg" id="dia_semana" name="dia_semana" required>
+                            <option value="">Seleccione un día</option>
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miercoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                          </select>
+                          <small class="form-text text-muted">Día programado para la cita</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-center mt-4">
+                      <button type="submit" class="btn btn-primary btn-lg px-5">
+                        <i class="fas fa-magic"></i> Realizar Predicción
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
-          <h5>Reporte de Clasificación</h5>
-          <table class="table table-dark table-bordered">
-            <thead>
-              <tr>
-                <th>Clase</th>
-                <th>Precisión</th>
-                <th>Recall (Sensibilidad)</th>
-                <th>F1-Score</th>
-                <th>Soporte</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for class_name, metrics in class_report.items() %}
-                {% if class_name in ['No Asistió', 'Sí Asistió'] %}
-                <tr>
-                  <td>{{ class_name }}</td>
-                  <td>{{ "%.2f"|format(metrics.precision) }}</td>
-                  <td>{{ "%.2f"|format(metrics.recall) }}</td>
-                  <td>{{ "%.2f"|format(metrics['f1-score']) }}</td>
-                  <td>{{ metrics.support }}</td>
-                </tr>
-                {% endif %}
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% endif %}
 
-      {% if matriz_confusion_img %}
-        <div class="mb-4 text-center">
-          <h4>Matriz de Confusión</h4>
-          <img src="data:image/png;base64,{{ matriz_confusion_img }}" alt="Matriz de confusión" class="img-fluid rounded">
-        </div>
-      {% endif %}
+          <!-- Resultados de la predicción -->
+          {% if resultado is not none %}
+          <div class="row mb-4">
+            <div class="col-lg-8 mx-auto">
+              <div class="card bg-dark border-success shadow-lg regression-card regression-result-card">
+                <div class="card-header bg-success text-white">
+                  <h4><i class="fas fa-bullseye"></i> Resultado de la Predicción</h4>
+                </div>
+                <div class="card-body p-4">
+                  <div class="row text-center">
+                    <div class="col-md-6 mb-3">
+                      <div class="alert {% if resultado == 1 %}alert-success{% else %}alert-warning{% endif %} h-100">
+                        <h5><i class="fas {% if resultado == 1 %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i></h5>
+                        <strong>Predicción:</strong><br>
+                        <span class="h4">{% if resultado == 1 %}✅ Sí Asistirá{% else %}❌ No Asistirá{% endif %}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="alert alert-info h-100">
+                        <h5><i class="fas fa-percentage"></i></h5>
+                        <strong>Probabilidad de asistencia:</strong><br>
+                        <span class="h4">{{ probabilidad }}%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
 
-      {% if curva_roc_img %}
-        <div class="mb-4 text-center">
-          <h4>Curva ROC</h4>
-          <img src="data:image/png;base64,{{ curva_roc_img }}" alt="Curva ROC" class="img-fluid rounded">
-        </div>
-      {% endif %}
+          <!-- Explicación del modelo -->
+          <div class="row mb-4 regression-info-section">
+            <div class="col-lg-6 mb-3">
+              <div class="card bg-dark border-info h-100 shadow regression-card">
+                <div class="card-header">
+                  <h5><i class="fas fa-info-circle"></i> Acerca del Modelo</h5>
+                </div>
+                <div class="card-body">
+                  <p>
+                    Este modelo utiliza <strong>regresión logística</strong> para predecir la probabilidad de que un paciente 
+                    asista a su cita médica basándose en factores como:
+                  </p>
+                  <ul>
+                    <li><strong>Edad:</strong> Edad del paciente en años</li>
+                    <li><strong>Tiempo de espera:</strong> Días transcurridos desde la solicitud de la cita</li>
+                    <li><strong>Historial de citas:</strong> Número de citas previas del paciente</li>
+                    <li><strong>Día de la semana:</strong> Día programado para la cita</li>
+                  </ul>
+                  <p class="text-muted small">
+                    El modelo ha sido entrenado con datos simulados y proporciona una estimación probabilística 
+                    de la asistencia basada en patrones históricos.
+                  </p>
+                </div>
+              </div>
+            </div>
 
-      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
+            <!-- Métricas de evaluación (en la misma fila) -->
+            {% if accuracy is not none and class_report is not none %}
+            <div class="col-lg-6 mb-3">
+              <div class="card bg-dark border-warning h-100 shadow regression-card">
+                <div class="card-header">
+                  <h5><i class="fas fa-chart-bar"></i> Rendimiento del Modelo</h5>
+                </div>
+                <div class="card-body">
+                  <div class="alert alert-info text-center mb-3">
+                    <h6><i class="fas fa-target"></i> Exactitud: <strong>{{ accuracy }}%</strong></h6>
+                    <small class="text-muted">El modelo predice correctamente {{ accuracy }}% de los casos</small>
+                  </div>
+                  
+                  <div class="table-responsive">
+                    <table class="table table-dark table-sm">
+                      <thead class="table-info">
+                        <tr>
+                          <th class="small">Clase</th>
+                          <th class="small">Precisión</th>
+                          <th class="small">Recall</th>
+                          <th class="small">F1-Score</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for class_name, metrics in class_report.items() %}
+                          {% if class_name in ['No Asistió', 'Sí Asistió'] %}
+                          <tr>
+                            <td class="small">
+                              {% if class_name == 'Sí Asistió' %}
+                                <span class="badge bg-success">✅</span>
+                              {% else %}
+                                <span class="badge bg-warning">❌</span>
+                              {% endif %}
+                              {{ class_name }}
+                            </td>
+                            <td class="small">{{ "%.2f"|format(metrics.precision) }}</td>
+                            <td class="small">{{ "%.2f"|format(metrics.recall) }}</td>
+                            <td class="small">{{ "%.2f"|format(metrics['f1-score']) }}</td>
+                          </tr>
+                          {% endif %}
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          </div>
+          {% endif %}
+
+          <!-- Dataset y métricas -->
+          {% if dataset_head and dataset_info %}
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card bg-dark border-secondary shadow">
+                <div class="card-header">
+                  <h5><i class="fas fa-database"></i> Información del Conjunto de Datos</h5>
+                </div>
+                <div class="card-body">
+                  <p>
+                    El modelo fue entrenado con un conjunto de datos simulado de <strong>500 registros</strong> 
+                    que simula patrones reales de asistencia a citas médicas.
+                  </p>
+                  
+                  <div class="row">
+                    <div class="col-lg-6 mb-3">
+                      <h6>Muestra de los datos:</h6>
+                      <div class="table-responsive">
+                        {{ dataset_head|safe }}
+                      </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                      <h6>Información técnica:</h6>
+                      <pre class="bg-secondary p-3 rounded text-white small dataset-info-container"><code>{{ dataset_info }}</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Visualizaciones -->
+          {% if matriz_confusion_img or curva_roc_img %}
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card bg-dark border-success shadow">
+                <div class="card-header">
+                  <h5><i class="fas fa-chart-area"></i> Visualizaciones del Modelo</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    {% if matriz_confusion_img %}
+                    <div class="col-lg-6 text-center mb-4">
+                      <h6><i class="fas fa-table"></i> Matriz de Confusión</h6>
+                      <p class="text-muted small">Muestra la precisión de las predicciones del modelo</p>
+                      <div class="chart-container">
+                        <img src="data:image/png;base64,{{ matriz_confusion_img }}" 
+                             alt="Matriz de confusión" class="img-fluid rounded border">
+                      </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if curva_roc_img %}
+                    <div class="col-lg-6 text-center mb-4">
+                      <h6><i class="fas fa-chart-line"></i> Curva ROC</h6>
+                      <p class="text-muted small">Evalúa el rendimiento del clasificador</p>
+                      <div class="chart-container">
+                        <img src="data:image/png;base64,{{ curva_roc_img }}" 
+                             alt="Curva ROC" class="img-fluid rounded border">
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Botones de navegación -->
+          <div class="row">
+            <div class="col-12 text-center">
+              <div class="card bg-dark border-light shadow">
+                <div class="card-body py-4">
+                  <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-lg me-3 mb-2">
+                    <i class="fas fa-home"></i> Volver al Menú Principal
+                  </a>
+                  <a href="{{ url_for('conceptos_regresionLogistica') }}" class="btn btn-outline-info btn-lg mb-2">
+                    <i class="fas fa-book"></i> Conceptos de Regresión Logística
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
