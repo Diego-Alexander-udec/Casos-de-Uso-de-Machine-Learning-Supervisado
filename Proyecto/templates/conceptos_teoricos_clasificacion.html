@@ -9,35 +9,36 @@
   </head>
   <body class="fondo-personalizado text-white">
     <div class="container mt-5">
-      <h2 class="text-center mb-4">Conceptos básicos del Perceptrón Multicapa (MLP)</h2>
+      <h2 class="text-center mb-4">¿Qué es el Perceptrón Multicapa (MLP)?</h2>
       <div class="bg-dark p-4 rounded">
-        <h4>Descripción general</h4>
+        <h4>Explicación sencilla y cercana</h4>
         <p>
-          El Perceptrón Multicapa (MLP) es una arquitectura de red neuronal supervisada que permite modelar relaciones no lineales entre variables. Según IBM (s.f.), esta estructura se compone de capas conectadas que ajustan sus pesos mediante el algoritmo de retropropagación.
         </p>
         <p>
-          Además, como se explica en Platzi (s.f.), el modelo MLPClassifier requiere que las variables numéricas sean escaladas antes del entrenamiento ya que las funciones de activación como ReLU y sigmoide son sensibles a la magnitud de los datos.
         </p>
         <p>
-          DataSource.ai (2023) menciona que la regularización mediante penalización L2 o dropout es clave para evitar el sobreajuste, especialmente cuando se trabaja con datasets pequeños o ruidosos.
+          En Platzi nos comentan que antes de entrenar el modelo es importante que los datos estén bien preparados sobre todo los números porque las funciones que usan para aprender (como ReLU y sigmoide) pueden confundirse si los datos son muy grandes o muy pequeños.
+        </p>
+        <p>
+          Además en DataSource.ai recomiendan usar técnicas como la regularización (por ejemplo, L2 o dropout) para evitar que el modelo se "sobreentrene" y solo sepa responder a los ejemplos que ya vio en vez de aprender a generalizar.
         </p>
 
-        <h4>Conceptos clave</h4>
+        <h4>¿Qué cosas hay que tener en cuenta?</h4>
         <ul>
-          <li><strong>Capas ocultas:</strong> permiten modelar relaciones no lineales entre las variables. Cuantas más capas y neuronas, será mayor la capacidad de representación.</li>
-          <li><strong>Funciones de activación:</strong> transforman la salida de cada neurona Las más comunes son ReLU, sigmoide y tanh.</li>
-          <li><strong>Regularización:</strong> técnicas como dropout o penalización L2 ayudan a evitar el sobreajuste (overfitting).</li>
-          <li><strong>Backpropagation:</strong> algoritmo que ajusta los pesos de la red mediante el cálculo del gradiente del error.</li>
-          <li><strong>Escalado:</strong> es esencial aplicar escalado (Standard o MinMax) a las variables numéricas antes del entrenamiento.</li>
+          <li><strong>Capas ocultas:</strong> nos ayudan a descubrir patrones complejos en los datos como si fueran detectives buscando pistas.</li>
+          <li><strong>Funciones de activación:</strong> son como filtros que transforman la información en cada paso para que la red entienda mejor lo que está viendo.</li>
+          <li><strong>Regularización:</strong> sirve para que el modelo no se "aprenda de memoria" los datos y pueda responder bien a nuevos casos.</li>
+          <li><strong>Backpropagation:</strong> es el método que usa la red para corregirse y mejorar como cuando se repasa un examen y se ve en qué se ha equivocado.</li>
+          <li><strong>Escalado:</strong> es importante que los números estén en rangos similares para que el modelo no se confunda como si todos los datos hablaran el mismo idioma.</li>
         </ul>
 
-        <p><strong>Ejemplo aplicado:</strong> Clasificación de imágenes de dígitos escritos a mano (dataset MNIST), donde el MLP aprende a distinguir entre los números del 0 al 9 a partir de píxeles normalizados.</p>
+        <p><strong>Un ejemplo fácil:</strong> Imaginarnos que el MLP aprende a reconocer números escritos a mano (como en el dataset MNIST) usando imágenes donde cada píxel está normalizado Así la red puede distinguir entre un "2" y un "8" aunque estén escritos de formas distintas.</p>
 
-        <p><strong>Referencias:</strong></p>
+        <h4>Fuentes y recursos</h4>
         <ul class="references-list">
-          <li>IBM. (s.f.). <em>¿Qué son las redes neuronales?</em> Recuperado de <a href="https://www.ibm.com/mx-es/topics/neural-networks" target="_blank" rel="noopener">https://www.ibm.com/mx-es/topics/neural-networks</a></li>
-          <li>Platzi. (s.f.). <em>Redes Neuronales Artificiales: Perceptrón Multicapa</em>. Recuperado de <a href="https://platzi.com/clases/2290-redes-neuronales/37209-perceptron-multicapa-mlp/" target="_blank" rel="noopener">https://platzi.com/clases/2290-redes-neuronales/37209-perceptron-multicapa-mlp/</a></li>
-          <li>DataScience.ai. (2023). <em>Introducción a la regularización en redes neuronales</em>. Recuperado de <a href="https://www.datasource.ai/es/data-science-articles/regularizacion-en-redes-neuronales" target="_blank" rel="noopener">https://www.datasource.ai/es/data-science-articles/regularizacion-en-redes-neuronales</a></li>
+          <li>IBM. (s.f.). ¿Qué son las redes neuronales? Recuperado de <a href="https://www.ibm.com/mx-es/topics/neural-networks" target="_blank" rel="noopener">https://www.ibm.com/mx-es/topics/neural-networks</a></li>
+          <li>Platzi. (s.f.). Redes Neuronales Artificiales: Perceptrón Multicapa. Recuperado de <a href="https://platzi.com/clases/2290-redes-neuronales/37209-perceptron-multicapa-mlp/" target="_blank" rel="noopener">https://platzi.com/clases/2290-redes-neuronales/37209-perceptron-multicapa-mlp/</a></li>
+          <li>DataSource.ai. (2023). Introducción a la regularización en redes neuronales. Recuperado de <a href="https://www.datasource.ai/es/data-science-articles/regularizacion-en-redes-neuronales" target="_blank" rel="noopener">https://www.datasource.ai/es/data-science-articles/regularizacion-en-redes-neuronales</a></li>
         </ul>
       </div>
       <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
