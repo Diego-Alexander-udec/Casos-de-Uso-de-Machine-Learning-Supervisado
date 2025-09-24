@@ -37,6 +37,10 @@ def conceptos_regresion():
 def conceptos_regresionLogistica():
     return render_template('conceptos_regresionLogistica.html')
 
+@app.route('/conceptos_clasificacion')
+def conceptos_clasificacion():
+    return render_template('conceptos_clasificacion.html')
+
 @app.route('/regresion_lineal', methods=['GET', 'POST'])
 def regresion_lineal():
     resultado = None
@@ -107,6 +111,11 @@ def regresion_logistica():
                          class_report=class_report,
                          dataset_head=dataset_head,
                          dataset_info=dataset_info)
+
+@app.route('/caso_practico_clasificacion', methods=['GET', 'POST'])
+def caso_practico_clasificacion():
+    # Aquí va la lógica para métricas, formulario y resultados
+    return render_template('caso_practico_clasificacion.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
