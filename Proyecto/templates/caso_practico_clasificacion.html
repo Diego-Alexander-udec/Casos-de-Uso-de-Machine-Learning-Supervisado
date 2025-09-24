@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clasificación de Señales Eléctricas - Perceptrón</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="fondo-personalizado text-white">
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-10">
+                <h1 class="text-center mb-4">
+                    <i class="fas fa-bolt"></i> Clasificación de Señales Eléctricas Industriales
+                </h1>
+                <p class="text-center mb-4">
+                    Utiliza nuestro modelo Perceptrón para predecir el estado de un sistema industrial basado en sus señales eléctricas.
+                </p>
+
+                <!-- Formulario de predicción -->
+                <div class="row mb-4">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card bg-dark border-secondary shadow-lg regression-card regression-form-card">
+                            <div class="card-header">
+                                <h4><i class="fas fa-wave-square"></i> Datos de la Señal Eléctrica</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <form method="post">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="voltaje" class="form-label"><i class="fas fa-charging-station"></i> Voltaje Promedio (V):</label>
+                                                <input type="number" step="any" class="form-control form-control-lg" id="voltaje" name="voltaje" required placeholder="Ej: 220.5">
+                                                <small class="form-text text-muted">Nivel de tensión de la señal</small>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="frecuencia" class="form-label"><i class="fas fa-tachometer-alt"></i> Frecuencia (Hz):</label>
+                                                <input type="number" step="any" class="form-control form-control-lg" id="frecuencia" name="frecuencia" required placeholder="Ej: 50.1">
+                                                <small class="form-text text-muted">Oscilaciones por segundo</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="duracion" class="form-label"><i class="fas fa-hourglass-half"></i> Duración de Señal (ms):</label>
+                                                <input type="number" step="any" class="form-control form-control-lg" id="duracion" name="duracion" required placeholder="Ej: 500">
+                                                <small class="form-text text-muted">Tiempo de la medición</small>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="tasa_cambio" class="form-label"><i class="fas fa-chart-line"></i> Tasa de Cambio (V/s):</label>
+                                                <input type="number" step="any" class="form-control form-control-lg" id="tasa_cambio" name="tasa_cambio" required placeholder="Ej: 10.2">
+                                                <small class="form-text text-muted">Velocidad de variación del voltaje</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                                            <i class="fas fa-cogs"></i> Clasificar Estado
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resultados de la predicción -->
+                {% if resultado is not none %}
+                <div class="row mb-4">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card bg-dark border-success shadow-lg regression-card regression-result-card">
+                            <div class="card-header bg-success text-white">
+                                <h4><i class="fas fa-bullseye"></i> Resultado de la Clasificación</h4>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="row text-center">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="alert {% if resultado == 'Sí' %}alert-success{% else %}alert-danger{% endif %} h-100">
+                                            <h5><i class="fas {% if resultado == 'Sí' %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i></h5>
+                                            <strong>Predicción del Sistema:</strong><br>
+                                            <span class="h4">{% if resultado == 'Sí' %}✅ Encendido{% else %}❌ Apagado{% endif %}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="alert alert-info h-100">
+                                            <h5><i class="fas fa-percentage"></i></h5>
+                                            <strong>Probabilidad (Encendido):</strong><br>
+                                            <span class="h4">{{ probabilidad }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Métricas y Visualizaciones -->
+                {% if metricas %}
+                <div class="row mb-4">
+                    <!-- Métricas de evaluación -->
+                    <div class="col-lg-6 mb-4">
+                        <div class="card bg-dark border-warning h-100 shadow regression-card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-bar"></i> Rendimiento del Modelo</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info text-center mb-3">
+                                    <h6><i class="fas fa-target"></i> Exactitud: <strong>{{ "%.2f"|format(metricas.accuracy * 100) }}%</strong></h6>
+                                    <small class="text-muted">El modelo predice correctamente el {{ "%.2f"|format(metricas.accuracy * 100) }}% de los casos de prueba.</small>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-dark table-sm">
+                                        <thead class="table-info">
+                                            <tr>
+                                                <th class="small">Clase</th>
+                                                <th class="small">Precisión</th>
+                                                <th class="small">Recall</th>
+                                                <th class="small">F1-Score</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="small"><span class="badge bg-danger">❌</span> Apagado (No)</td>
+                                                <td class="small">{{ "%.2f"|format(metricas.precision_No) }}</td>
+                                                <td class="small">{{ "%.2f"|format(metricas.recall_No) }}</td>
+                                                <td class="small">{{ "%.2f"|format(metricas.f1_No) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="small"><span class="badge bg-success">✅</span> Encendido (Sí)</td>
+                                                <td class="small">{{ "%.2f"|format(metricas.precision_Sí) }}</td>
+                                                <td class="small">{{ "%.2f"|format(metricas.recall_Sí) }}</td>
+                                                <td class="small">{{ "%.2f"|format(metricas.f1_Sí) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Matriz de Confusión -->
+                    <div class="col-lg-6 text-center mb-4">
+                        <div class="card bg-dark border-info h-100 shadow regression-card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-table"></i> Matriz de Confusión</h6>
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-center">
+                                <p class="text-muted small">Muestra la precisión de las predicciones del modelo en el conjunto de prueba.</p>
+                                <div class="chart-container">
+                                    <img src="data:image/png;base64,{{ matriz_confusion_img }}" alt="Matriz de confusión" class="img-fluid rounded border">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <!-- Gráfica de Errores de Entrenamiento -->
+                    <div class="col-lg-8 mx-auto text-center mb-4">
+                        <div class="card bg-dark border-primary shadow regression-card">
+                            <div class="card-header">
+                                <h6><i class="fas fa-chart-area"></i> Evolución de Errores Durante el Entrenamiento</h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted small">Número de errores (actualizaciones de pesos) en cada época de entrenamiento.</p>
+                                <div class="chart-container">
+                                    <img src="data:image/png;base64,{{ errores_entrenamiento_img }}" alt="Errores de entrenamiento" class="img-fluid rounded border">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Botones de navegación -->
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="card bg-dark border-light shadow">
+                            <div class="card-body py-4">
+                                <a href="{{ url_for('index') }}" class="btn btn-outline-light btn-lg me-3 mb-2">
+                                    <i class="fas fa-home"></i> Volver al Menú Principal
+                                </a>
+                                <a href="{{ url_for('conceptos_clasificacion') }}" class="btn btn-outline-info btn-lg mb-2">
+                                    <i class="fas fa-book"></i> Conceptos de Clasificación
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
