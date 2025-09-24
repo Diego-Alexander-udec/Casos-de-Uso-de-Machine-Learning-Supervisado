@@ -52,12 +52,66 @@
 
 /* Estilos de las cards */
 .card {
-    max-width: 400px;
-    margin: 10px;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
 }
 
 .card-body {
     color: white;
+}
+
+/* Cards específicas para regresión logística */
+.regression-card {
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.regression-form-card {
+    max-width: 800px;
+}
+
+.regression-result-card {
+    max-width: 800px;
+}
+
+.regression-info-section .card {
+    height: 100%;
+}
+
+/* Estilos para gráficas */
+.chart-container {
+    max-height: 400px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.chart-container img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+/* Información del dataset */
+.dataset-info-container {
+    max-height: 300px;
+    overflow-y: auto;
+    border-radius: 6px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .regression-form-card,
+    .regression-result-card {
+        max-width: 100%;
+    }
+    
+    .chart-container {
+        max-height: 300px;
+    }
 }
 
 .case-card {

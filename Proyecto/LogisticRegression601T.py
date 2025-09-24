@@ -81,14 +81,16 @@ print(f'\nExactitud del modelo: {accuracy * 100:.2f}%')
 
 # b) Matriz de Confusión
 conf_matrix = confusion_matrix(y_prueba, y_pred)
-plt.figure(figsize=(8, 6))
-sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
-            xticklabels=['No Asistió', 'Sí Asistió'],
-            yticklabels=['No Asistió', 'Sí Asistió'])
-plt.xlabel('Predicción')
-plt.ylabel('Valor Real')
-plt.title('Matriz de Confusión')
-plt.show()
+print(f'\nMatriz de Confusión:\n{conf_matrix}')
+# Comentamos plt.show() para evitar ventanas emergentes
+# plt.figure(figsize=(8, 6))
+# sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues',
+#             xticklabels=['No Asistió', 'Sí Asistió'],
+#             yticklabels=['No Asistió', 'Sí Asistió'])
+# plt.xlabel('Predicción')
+# plt.ylabel('Valor Real')
+# plt.title('Matriz de Confusión')
+# plt.show()
 
 # c) Reporte de Clasificación (Precisión, Recall, F1-Score)
 print("\n--- Reporte de Clasificación ---")
@@ -99,14 +101,15 @@ auc = roc_auc_score(y_prueba, y_pred_proba)
 print(f'Área Bajo la Curva (AUC-ROC): {auc:.4f}')
 
 fpr, tpr, _ = roc_curve(y_prueba, y_pred_proba)
-plt.figure(figsize=(8, 6))
-plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'Curva ROC (AUC = {auc:.2f})')
-plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-plt.xlabel('Tasa de Falsos Positivos (FPR)')
-plt.ylabel('Tasa de Verdaderos Positivos (TPR)')
-plt.title('Curva ROC')
-plt.legend(loc='lower right')
-plt.show()
+# Comentamos plt.show() para evitar ventanas emergentes
+# plt.figure(figsize=(8, 6))
+# plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'Curva ROC (AUC = {auc:.2f})')
+# plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+# plt.xlabel('Tasa de Falsos Positivos (FPR)')
+# plt.ylabel('Tasa de Verdaderos Positivos (TPR)')
+# plt.title('Curva ROC')
+# plt.legend(loc='lower right')
+# plt.show()
 
 
 # --- 5. Ejemplo de Predicción con Nuevos Datos ---
@@ -141,6 +144,8 @@ class ModeloLogistico:
         self.modelo = joblib.load('modelo_citas.joblib')
         self.X_test = pd.read_csv('X_prueba.csv')
         self.y_test = pd.read_csv('y_prueba.csv').iloc[:, 0]
+        # Almacenamos el DataFrame original para la descripción
+        self.df_original = df.copy()
         
     def predecir_asistencia(self, edad, tiempo_espera, citas_previas, dia_semana):
         nuevo_dato = pd.DataFrame({
@@ -179,6 +184,21 @@ class ModeloLogistico:
         plt.ylabel('Tasa de Verdaderos Positivos (TPR)')
         plt.title('Curva ROC')
         plt.legend(loc='lower right')
+        
+    def obtener_metricas_evaluacion(self):
+        y_pred = self.modelo.predict(self.X_test)
+        accuracy = accuracy_score(self.y_test, y_pred)
+        report = classification_report(self.y_test, y_pred, target_names=['No Asistió', 'Sí Asistió'], output_dict=True)
+        
+        return round(accuracy * 100, 2), report
+
+    def obtener_descripcion_dataset(self):
+        # Usamos el DataFrame original para la descripción
+        descripcion = {
+            'head': self.df_original.head().to_html(classes='table table-dark table-striped', index=False),
+            'info': None  # Se procesará en app.py
+        }
+        return descripcion
 
 # Crear instancia global del modelo
 modelo_logistico = ModeloLogistico()

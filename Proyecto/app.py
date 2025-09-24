@@ -37,6 +37,10 @@ def conceptos_regresion():
 def conceptos_regresionLogistica():
     return render_template('conceptos_regresionLogistica.html')
 
+@app.route('/conceptos_clasificacion')
+def conceptos_clasificacion():
+    return render_template('conceptos_clasificacion.html')
+
 @app.route('/regresion_lineal', methods=['GET', 'POST'])
 def regresion_lineal():
     resultado = None
@@ -56,7 +60,18 @@ def regresion_logistica():
     probabilidad = None
     matriz_confusion_img = None
     curva_roc_img = None
+    accuracy = None
+    class_report = None
     
+    # Obtener descripción del dataset para mostrarla siempre
+    descripcion_dataset = modelo_logistico.obtener_descripcion_dataset()
+    dataset_head = descripcion_dataset['head']
+    
+    # Capturar la salida de df.info() para mostrarla en HTML
+    buf = io.StringIO()
+    modelo_logistico.df_original.info(buf=buf)
+    dataset_info = buf.getvalue()
+
     if request.method == 'POST':
         edad = request.form.get('edad', type=int)
         tiempo_espera = request.form.get('tiempo_espera', type=int)
@@ -83,12 +98,24 @@ def regresion_logistica():
             buffer.seek(0)
             curva_roc_img = base64.b64encode(buffer.getvalue()).decode()
             plt.close()
+
+            # Obtener exactitud y reporte de clasificación
+            accuracy, class_report = modelo_logistico.obtener_metricas_evaluacion()
             
     return render_template('regresion_logistica.html',
                          resultado=resultado,
                          probabilidad=probabilidad,
                          matriz_confusion_img=matriz_confusion_img,
-                         curva_roc_img=curva_roc_img)
+                         curva_roc_img=curva_roc_img,
+                         accuracy=accuracy,
+                         class_report=class_report,
+                         dataset_head=dataset_head,
+                         dataset_info=dataset_info)
+
+@app.route('/caso_practico_clasificacion', methods=['GET', 'POST'])
+def caso_practico_clasificacion():
+    # Aquí va la lógica para métricas, formulario y resultados
+    return render_template('caso_practico_clasificacion.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
