@@ -53,13 +53,21 @@ def regresion_lineal():
     resultado = None
     temperatura = None
     dia_semana = None
+    
     if request.method == 'POST':
         temperatura = request.form.get('temperatura', type=float)
         dia_semana = request.form.get('dia_semana', type=int)
         if temperatura is not None and dia_semana is not None:
             resultado = LinearRegression601T.EstimarVentasHelados(temperatura, dia_semana)
-    LinearRegression601T.generar_grafica(temperatura, dia_semana, resultado)
-    return render_template('regresion_lineal.html', resultado=resultado)
+    
+    # Generar gráfica con nombre único para evitar cache
+    filename = f"grafica_{int(time.time())}.png" if temperatura is not None else "grafica.png"
+    LinearRegression601T.generar_grafica(temperatura, dia_semana, resultado, filename)
+    
+    # Timestamp para cache busting
+    timestamp = int(time.time())
+    
+    return render_template('regresion_lineal.html', resultado=resultado, timestamp=timestamp)
 
 @app.route('/regresion_logistica', methods=['GET', 'POST'])
 def regresion_logistica():

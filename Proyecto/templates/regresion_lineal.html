@@ -32,8 +32,8 @@
           El dataset contiene registros de ventas de helados según la temperatura y el día de la semana. Se utiliza para entrenar un modelo de regresión lineal que permite predecir las ventas esperadas.
         </p>
       </div>
-      <div class="mb-4 text-center">
-        <img src="{{ url_for('static', filename='grafica.png') }}" alt="Gráfico de regresión lineal" class="img-fluid rounded">
+      <div class="chart-container mb-4">
+        <img src="{{ url_for('static', filename='grafica.png') }}?v={{ timestamp or '' }}" alt="Gráfico de regresión lineal" class="img-fluid rounded">
       </div>
       <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
     </div>
