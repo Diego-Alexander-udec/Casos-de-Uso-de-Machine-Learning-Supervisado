@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conceptos básicos - Perceptrón Multicapa (MLP)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="fondo-personalizado text-white">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Conceptos básicos del Perceptrón Multicapa (MLP)</h2>
+      <div class="bg-dark p-4 rounded">
+        <h4>Descripción general</h4>
+        <p>
+          El Perceptrón Multicapa (MLP) es una arquitectura de red neuronal supervisada que permite modelar relaciones no lineales entre variables. Según IBM (s.f.), esta estructura se compone de capas conectadas que ajustan sus pesos mediante el algoritmo de retropropagación.
+        </p>
+        <p>
+          Además, como se explica en Platzi (s.f.), el modelo MLPClassifier requiere que las variables numéricas sean escaladas antes del entrenamiento ya que las funciones de activación como ReLU y sigmoide son sensibles a la magnitud de los datos.
+        </p>
+        <p>
+          DataSource.ai (2023) menciona que la regularización mediante penalización L2 o dropout es clave para evitar el sobreajuste, especialmente cuando se trabaja con datasets pequeños o ruidosos.
+        </p>
+
+        <h4>Conceptos clave</h4>
+        <ul>
+          <li><strong>Capas ocultas:</strong> permiten modelar relaciones no lineales entre las variables. Cuantas más capas y neuronas, será mayor la capacidad de representación.</li>
+          <li><strong>Funciones de activación:</strong> transforman la salida de cada neurona Las más comunes son ReLU, sigmoide y tanh.</li>
+          <li><strong>Regularización:</strong> técnicas como dropout o penalización L2 ayudan a evitar el sobreajuste (overfitting).</li>
+          <li><strong>Backpropagation:</strong> algoritmo que ajusta los pesos de la red mediante el cálculo del gradiente del error.</li>
+          <li><strong>Escalado:</strong> es esencial aplicar escalado (Standard o MinMax) a las variables numéricas antes del entrenamiento.</li>
+        </ul>
+
+        <p><strong>Ejemplo aplicado:</strong> Clasificación de imágenes de dígitos escritos a mano (dataset MNIST), donde el MLP aprende a distinguir entre los números del 0 al 9 a partir de píxeles normalizados.</p>
+
+        <p><strong>Referencias:</strong></p>
+        <ul class="references-list">
+          <li>IBM. (s.f.). <em>¿Qué son las redes neuronales?</em> Recuperado de <a href="https://www.ibm.com/mx-es/topics/neural-networks" target="_blank" rel="noopener">https://www.ibm.com/mx-es/topics/neural-networks</a></li>
+          <li>Platzi. (s.f.). <em>Redes Neuronales Artificiales: Perceptrón Multicapa</em>. Recuperado de <a href="https://platzi.com/clases/2290-redes-neuronales/37209-perceptron-multicapa-mlp/" target="_blank" rel="noopener">https://platzi.com/clases/2290-redes-neuronales/37209-perceptron-multicapa-mlp/</a></li>
+          <li>DataScience.ai. (2023). <em>Introducción a la regularización en redes neuronales</em>. Recuperado de <a href="https://www.datasource.ai/es/data-science-articles/regularizacion-en-redes-neuronales" target="_blank" rel="noopener">https://www.datasource.ai/es/data-science-articles/regularizacion-en-redes-neuronales</a></li>
+        </ul>
+      </div>
+      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

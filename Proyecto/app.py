@@ -1,13 +1,14 @@
+import matplotlib
+matplotlib.use('Agg')  # Configurar el backend ANTES de importar pyplot
+
 from flask import Flask, render_template, request
 import LinearRegression601T
 import io
 import base64
 import matplotlib.pyplot as plt 
-import matplotlib
 from LogisticRegression601T import modelo_logistico
 from perceptron_senales_industriales_mejorado import PerceptronClassifier
 
-matplotlib.use('Agg')  # Configurar el backend de matplotlib para uso sin interfaz gráfica
 app = Flask(__name__)
 
 @app.route("/")
@@ -115,8 +116,6 @@ def regresion_logistica():
 
 @app.route('/caso_practico_clasificacion', methods=['GET', 'POST'])
 def caso_practico_clasificacion():
-    # Aquí va la lógica para métricas, formulario y resultados
-    return render_template('caso_practico_clasificacion.html')
     resultado_prediccion = None
     probabilidad = None
     metricas = None
@@ -124,7 +123,7 @@ def caso_practico_clasificacion():
     errores_entrenamiento_img = None
     
     # Instanciar el clasificador. Se entrenará si se envía el formulario.
-    classifier = PerceptronClassifier(eta=0.1, n_iter=1000, random_state=42)
+    classifier = PerceptronClassifier(eta=0.01, n_iter=50, random_state=42)
 
     if request.method == 'POST':
         voltaje = request.form.get('voltaje', type=float)
@@ -133,6 +132,10 @@ def caso_practico_clasificacion():
         tasa_cambio = request.form.get('tasa_cambio', type=float)
 
         if all(v is not None for v in [voltaje, frecuencia, duracion, tasa_cambio]):
+            # Desactivar la salida de texto a la consola para limpiar la respuesta del servidor
+            import sys
+            original_stdout = sys.stdout
+            sys.stdout = io.StringIO()
             # 1. Entrenar el modelo
             classifier.train()
 
@@ -159,6 +162,9 @@ def caso_practico_clasificacion():
             buffer_err.seek(0)
             errores_entrenamiento_img = base64.b64encode(buffer_err.getvalue()).decode()
             plt.close()
+            
+            # Restaurar la salida estándar
+            sys.stdout = original_stdout
 
     return render_template('caso_practico_clasificacion.html',
                            resultado=resultado_prediccion,
