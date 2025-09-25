@@ -2,14 +2,14 @@ import matplotlib
 matplotlib.use('Agg')  # Configurar el backend ANTES de importar pyplot
 
 from flask import Flask, render_template, request
-import LinearRegression601T
+from Proyecto import LinearRegression601T
 import io
 import base64
 import matplotlib.pyplot as plt 
-from LogisticRegression601T import modelo_logistico
-from perceptron_senales_industriales_mejorado import PerceptronClassifier
+from Proyecto.LogisticRegression601T import modelo_logistico
+from Proyecto.perceptron_senales_industriales_mejorado import PerceptronClassifier
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='Proyecto/templates', static_folder='Proyecto/static')
 
 @app.route("/")
 def home():
