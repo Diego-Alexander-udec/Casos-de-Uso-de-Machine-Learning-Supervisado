@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Conceptos básicos - Aprendizaje por Refuerzo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body class="fondo-personalizado text-white">
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Conceptos básicos de Aprendizaje por Refuerzo</h2>
+      <div class="bg-dark p-4 rounded">
+        <h4>¿Qué es el Aprendizaje por Refuerzo?</h4>
+        <p>
+          El Aprendizaje por Refuerzo es diferente a lo que normalmente vemos en Machine Learning. Salesforce (s.f.) en su artículo "Aprendizaje por refuerzo: lo que necesitas saber" nos explica que mientras el aprendizaje supervisado necesita que alguien le diga al modelo cuál es la respuesta correcta en miles de ejemplos, y el no supervisado busca patrones por su cuenta sin ayuda, el aprendizaje por refuerzo funciona más como cuando aprendemos a andar en bicicleta: probando, cayéndonos y mejorando cada vez
+        </p>
+        <p>
+          Lo interesante es que el agente (así le llamamos al sistema que aprende) no recibe instrucciones directas. En cambio cada vez que hace algo, recibe una señal que le dice si lo hizo bien o mal, como cuando un videojuego te da puntos o te los quita. Con el tiempo el agente aprende qué acciones le dan más puntos y cuáles debe evitar.
+        </p>
+        
+        <h4>Componentes principales del sistema</h4>
+        <p>
+          En el tutorial de Aprende Machine Learning (s.f.) sobre "La tabla de Políticas" describen los elementos básicos que componen cualquier sistema de aprendizaje por refuerzo. Básicamente necesitamos:
+        </p>
+        <p>
+          <strong>Agente:</strong> es el que aprende y toma decisiones. Puede ser un robot, un programa o cualquier sistema inteligente que necesite aprender algo
+        </p>
+        <p>
+          <strong>Entorno:</strong> es el mundo donde el agente actúa. Si es un videojuego, el entorno es el juego completo con sus reglas. Si es un robot el entorno es el espacio físico donde se mueve.
+        </p>
+        <p>
+          <strong>Estados:</strong> son todas las situaciones diferentes en las que puede estar el agente. Por ejemplo en un juego de ajedrez cada posición del tablero es un estado diferente.
+        </p>
+        <p>
+          <strong>Acciones:</strong> son las cosas que el agente puede hacer. Mover una pieza, girar a la derecha, frenar, saltar, etc
+        </p>
+        <p>
+          <strong>Recompensas:</strong> son números que le dicen al agente si lo que hizo estuvo bien o mal. Como una nota en un examen pero después de cada acción que toma
+        </p>
+        <p>
+          <strong>Política:</strong> es la estrategia del agente, su forma de decidir qué hacer en cada momento. Es lo que el agente va mejorando mientras aprende
+        </p>
+
+        <h4>El balance entre explorar y aprovechar lo aprendido</h4>
+        <p>
+          Tutorials Point (s.f.) en su explicación sobre "Exploración y explotación en machine learning" menciona algo muy importante: imagínate que vas a un centro comercial con muchos restaurantes. Si siempre vas al mismo que ya conoces (porque sabes que es bueno), nunca descubrirás si hay otro mejor. Pero si cada vez pruebas uno diferente, podrías terminar comiendo mal varias veces antes de encontrar algo bueno.
+        </p>
+        <p>
+          Eso mismo pasa con el agente. Debe decidir entre usar lo que ya aprendió (explotar) o probar cosas nuevas para aprender más (explorar). Si solo explora, nunca aprovecha lo que sabe. Si solo explota, se queda estancado y no mejora. El truco está en encontrar el balance correcto.
+        </p>
+        <p>
+          También está el tema del <strong>retorno acumulado</strong> que básicamente significa que el agente no solo piensa en ganar puntos ahora, sino en ganar la mayor cantidad de puntos posibles a largo plazo. Para esto usa el <strong>descuento temporal</strong> (representado con γ) que hace que las recompensas futuras valgan un poco menos que las inmediatas, porque el futuro siempre tiene algo de incertidumbre.
+        </p>
+
+        <h4>Algoritmos más comunes</h4>
+        <p>
+          En la práctica hay varios algoritmos que se usan dependiendo del problema. Fundación Bankinter (s.f.) en su artículo "¿Qué es el Q-learning y cómo funciona?" nos habla de los más populares:
+        </p>
+        <p>
+          <strong>Q-Learning:</strong> es como si el agente fuera construyendo una tabla de apuntes donde anota qué tan bueno es hacer cada acción en cada situación. La "Q" viene de quality (calidad). Lo bueno es que no necesita saber cómo funciona el entorno por dentro solo va probando y tomando notas. Se usa mucho en robots, navegación y juegos
+        </p>
+        <p>
+          <strong>SARSA:</strong> DataCamp (s.f.) explica en su guía completa "Algoritmo de Aprendizaje por Refuerzo SARSA en Python" que es muy parecido a Q-Learning pero más cauteloso. Mientras Q-Learning siempre asume que va a tomar la mejor decisión posible, SARSA es más realista y toma en cuenta que a veces no vas a actuar perfectamente. Esto lo hace mejor para situaciones donde hay riesgo o mucha incertidumbre
+        </p>
+        <p>
+          <strong>Deep Q-Network (DQN):</strong> es una versión más avanzada que Damavis (s.f.) describe en su artículo "Aprendizaje por refuerzo profundo: DQN". En vez de usar tablas (que no funcionan cuando hay millones de estados posibles), usa redes neuronales para aprender. Esto permite resolver problemas mucho más complejos como jugar videojuegos con gráficos detallados o controlar sistemas industriales sofisticados.
+        </p>
+
+        <h4>Cosas importantes a tener en cuenta</h4>
+        <p>
+          <strong>Estabilidad del aprendizaje:</strong> UpGrad (s.f.) en su inmersión profunda "Exploración y explotación en el aprendizaje automático" advierte que el agente a veces aprende algo y luego lo olvida al seguir entrenando. Para evitar esto se usan buffers de experiencia, donde el agente guarda sus experiencias pasadas y las repasa de vez en cuando, como cuando estudias repasando los apuntes.
+        </p>
+        <p>
+          <strong>Tasa de exploración:</strong> al principio el agente debe explorar mucho porque no sabe nada. Pero conforme va aprendiendo, debe explorar menos y enfocarse más en usar lo que ya sabe. Por eso normalmente se va reduciendo poco a poco el parámetro epsilon (ε) que controla cuánto explora.
+        </p>
+        <p>
+          <strong>Diseño de recompensas:</strong> hay que tener mucho cuidado con cómo definimos las recompensas. Si las hacemos mal, el agente puede aprender a hacer trampa o encontrar formas de ganar puntos que no resuelven realmente el problema. Debemos ser muy claros sobre qué queremos premiar y qué castigar.
+        </p>
+        <p>
+          <strong>Convergencia:</strong> es importante revisar que las recompensas del agente efectivamente van mejorando con el tiempo y se estabilizan en un buen nivel. Si las recompensas suben y bajan mucho o no mejoran, probablemente hay que ajustar los parámetros del algoritmo.
+        </p>
+        <p>
+          <strong>Generalización:</strong> un buen agente debe funcionar bien no solo en las situaciones exactas que vio durante el entrenamiento, sino también en situaciones parecidas pero nuevas. Es como cuando aprendes a manejar en un carro y luego puedes manejar otros carros aunque sean diferentes.
+        </p>
+
+        <h4>Referencias</h4>
+        <ul class="references-list">
+          <li>Aprende Machine Learning. (s.f.). <em>Aprendizaje por refuerzo</em>. Recuperado de https://www.aprendemachinelearning.com/aprendizaje-por-refuerzo/</li>
+          <li>Damavis. (s.f.). <em>Aprendizaje por refuerzo profundo: DQN</em>. Recuperado de https://blog.damavis.com/aprendizaje-por-refuerzo-profundo-dqn/</li>
+          <li>DataCamp. (s.f.). <em>Algoritmo de Aprendizaje por Refuerzo SARSA en Python: Una guía completa</em>. Recuperado de https://www.datacamp.com/es/tutorial/sarsa-reinforcement-learning-algorithm-in-python</li>
+          <li>Fundación Bankinter. (s.f.). <em>¿Qué es el Q-learning y cómo funciona?</em> Recuperado de https://www.fundacionbankinter.org/noticias/q-learning/</li>
+          <li>Salesforce. (s.f.). <em>Aprendizaje por refuerzo: lo que necesitas saber</em>. Recuperado de https://www.salesforce.com/agentforce/reinforcement-learning/</li>
+          <li>Tutorials Point. (s.f.). <em>Exploration and exploitation in machine learning</em>. Recuperado de https://www.tutorialspoint.com/machine_learning/machine_learning_exploitation_and_exploration.htm</li>
+          <li>UpGrad. (s.f.). <em>Exploration and exploitation in machine learning: A deep dive into optimization techniques</em>. Recuperado de https://www.upgrad.com/tutorials/ai-ml/machine-learning-tutorial/exploration-and-exploitation-in-machine-learning/</li>
+        </ul>
+      </div>
+      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
+    </div>
+  </body>
+</html>

@@ -1,15 +1,15 @@
 import matplotlib
-matplotlib.use('Agg')  # Configurar el backend ANTES de importar pyplot
+matplotlib.use('Agg')  
 
 from flask import Flask, render_template, request
-from Proyecto import LinearRegression601T
+import LinearRegression601T
 import io
 import base64
 import matplotlib.pyplot as plt 
-from Proyecto.LogisticRegression601T import modelo_logistico
-from Proyecto.perceptron_senales_industriales_mejorado import PerceptronClassifier
+from LogisticRegression601T import modelo_logistico
+from perceptron_senales_industriales_mejorado import PerceptronClassifier
 
-app = Flask(__name__, template_folder='Proyecto/templates', static_folder='Proyecto/static')
+app = Flask(__name__)
 
 @app.route("/")
 def home():
@@ -47,6 +47,14 @@ def conceptos_clasificacion():
 def conceptos_teoricos_clasificacion():
     return render_template('conceptos_teoricos_clasificacion.html')
 
+@app.route('/conceptos_refuerzo')
+def conceptos_refuerzo():
+    return render_template('conceptos_refuerzo.html')
+
+@app.route('/caso_practico_refuerzo')
+def caso_practico_refuerzo():
+    return render_template('caso_practico_refuerzo.html')
+
 @app.route('/regresion_lineal', methods=['GET', 'POST'])
 def regresion_lineal():
     resultado = None
@@ -69,11 +77,9 @@ def regresion_logistica():
     accuracy = None
     class_report = None
     
-    # Obtener descripción del dataset para mostrarla siempre
     descripcion_dataset = modelo_logistico.obtener_descripcion_dataset()
     dataset_head = descripcion_dataset['head']
     
-    # Capturar la salida de df.info() para mostrarla en HTML
     buf = io.StringIO()
     modelo_logistico.df_original.info(buf=buf)
     dataset_info = buf.getvalue()
@@ -89,7 +95,6 @@ def regresion_logistica():
                 edad, tiempo_espera, citas_previas, dia_semana
             )
             
-            # Generar matriz de confusión
             buffer = io.BytesIO()
             modelo_logistico.plot_confusion_matrix()
             plt.savefig(buffer, format='png')
@@ -97,7 +102,6 @@ def regresion_logistica():
             matriz_confusion_img = base64.b64encode(buffer.getvalue()).decode()
             plt.close()
             
-            # Generar curva ROC
             buffer = io.BytesIO()
             modelo_logistico.plot_roc_curve()
             plt.savefig(buffer, format='png')
@@ -105,7 +109,6 @@ def regresion_logistica():
             curva_roc_img = base64.b64encode(buffer.getvalue()).decode()
             plt.close()
 
-            # Obtener exactitud y reporte de clasificación
             accuracy, class_report = modelo_logistico.obtener_metricas_evaluacion()
             
     return render_template('regresion_logistica.html',
@@ -126,7 +129,6 @@ def caso_practico_clasificacion():
     matriz_confusion_img = None
     errores_entrenamiento_img = None
     
-    # Instanciar el clasificador. Se entrenará si se envía el formulario.
     classifier = PerceptronClassifier(eta=0.01, n_iter=50, random_state=42)
 
     if request.method == 'POST':
@@ -136,22 +138,16 @@ def caso_practico_clasificacion():
         tasa_cambio = request.form.get('tasa_cambio', type=float)
 
         if all(v is not None for v in [voltaje, frecuencia, duracion, tasa_cambio]):
-            # Desactivar la salida de texto a la consola para limpiar la respuesta del servidor
             import sys
             original_stdout = sys.stdout
             sys.stdout = io.StringIO()
-            # 1. Entrenar el modelo
             classifier.train()
 
-            # 2. Realizar la predicción
             features = [voltaje, frecuencia, duracion, tasa_cambio]
             resultado_prediccion, probabilidad = classifier.predict_label(features)
-            probabilidad = round(probabilidad * 100, 2) # Convertir a porcentaje
-
-            # 3. Evaluar y obtener métricas
+            probabilidad = round(probabilidad * 100, 2) 
             metricas = classifier.evaluate()
 
-            # 4. Generar gráfica de Matriz de Confusión
             buffer_cm = io.BytesIO()
             classifier._plot_confusion_matrix(metricas['confusion_matrix'])
             plt.savefig(buffer_cm, format='png', bbox_inches='tight')
@@ -159,7 +155,6 @@ def caso_practico_clasificacion():
             matriz_confusion_img = base64.b64encode(buffer_cm.getvalue()).decode()
             plt.close()
 
-            # 5. Generar gráfica de Errores de Entrenamiento
             buffer_err = io.BytesIO()
             classifier._plot_training_errors()
             plt.savefig(buffer_err, format='png', bbox_inches='tight')
@@ -167,7 +162,6 @@ def caso_practico_clasificacion():
             errores_entrenamiento_img = base64.b64encode(buffer_err.getvalue()).decode()
             plt.close()
             
-            # Restaurar la salida estándar
             sys.stdout = original_stdout
 
     return render_template('caso_practico_clasificacion.html',
@@ -179,4 +173,3 @@ def caso_practico_clasificacion():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
