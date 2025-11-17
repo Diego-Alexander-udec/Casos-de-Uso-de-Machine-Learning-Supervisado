@@ -23,6 +23,25 @@ app = Flask(__name__, template_folder='Proyecto/templates', static_folder='Proye
 def home():
     name = "Bienvenido"
     return render_template('home.html', name=name)
+
+
+@app.route('/health')
+def health():
+    """Health check for production load balancer/Render"""
+    return 'OK', 200
+
+
+@app.route('/version')
+def version():
+    """Return a short git commit SHA so we can see which build is deployed"""
+    try:
+        import subprocess
+
+        sha = subprocess.check_output(['git', 'rev-parse', '--short', 'HEAD'],
+                                      cwd=os.path.dirname(__file__)).decode().strip()
+    except Exception:
+        sha = 'unknown'
+    return {'commit': sha}
    
 @app.route('/ucundinamarca')
 def index():
