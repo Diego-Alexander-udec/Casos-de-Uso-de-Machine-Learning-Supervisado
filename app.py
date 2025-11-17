@@ -1,5 +1,10 @@
 import matplotlib
-matplotlib.use('Agg')  
+matplotlib.use('Agg')
+
+import sys
+import os
+# Agregar el directorio Proyecto al path para imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'Proyecto'))
 
 from flask import Flask, render_template, request
 import LinearRegression601T
@@ -8,10 +13,11 @@ import base64
 import matplotlib.pyplot as plt 
 from LogisticRegression601T import modelo_logistico
 from perceptron_senales_industriales_mejorado import PerceptronClassifier
+from rl_agent_generic import train_qlearning
 import os
 import pickle
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='Proyecto/templates', static_folder='Proyecto/static')
 
 @app.route("/")
 def home():
