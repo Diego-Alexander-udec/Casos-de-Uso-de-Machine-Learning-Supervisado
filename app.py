@@ -72,7 +72,7 @@ def conceptos_regresion():
 
 
 @app.route('/conceptos_regresionLogistica')
-def conceptos_regresion_logistica():
+def conceptos_regresionLogistica():
     return render_template('conceptos_regresionLogistica.html')
 
 
@@ -128,15 +128,18 @@ def caso_practico_refuerzo():
             # Entrenar el agente
             results = train_qlearning(
                 env_id=env_id,
-                num_episodes=num_episodes,
+                episodes=num_episodes,
                 learning_rate=learning_rate,
                 discount_factor=discount_factor,
                 epsilon=epsilon,
                 epsilon_decay=epsilon_decay,
                 epsilon_min=epsilon_min,
-                bins=bins,
-                eval_episodes=50
+                bins=bins
             )
+
+            # Extraer evaluación
+            eval_stats = results.get('eval', {})
+            history = results.get('history', {})
 
             # Actualizar contexto con resultados
             context.update({
@@ -149,18 +152,29 @@ def caso_practico_refuerzo():
                 'epsilon_decay': epsilon_decay,
                 'epsilon_min': epsilon_min,
                 'bins': bins,
-                'mean_reward': results.get('mean_reward', 0),
-                'max_reward': results.get('max_reward', 0),
-                'mean_steps': results.get('mean_steps', 0),
-                'states_explored': results.get('states_explored', 0),
-                'eval_mean_reward': results.get('eval_mean_reward', 0),
-                'eval_std_reward': results.get('eval_std_reward', 0),
-                'eval_min_reward': results.get('eval_min_reward', 0),
-                'eval_max_reward': results.get('eval_max_reward', 0),
-                'eval_mean_steps': results.get('eval_mean_steps', 0),
-                'rewards_plot': results.get('rewards_plot', ''),
-                'epsilon_plot': results.get('epsilon_plot', ''),
-                'distributions_plot': results.get('distributions_plot', '')
+                'mean_reward': history.get(
+                    'avg_rewards', [0])[-1] if history.get(
+                        'avg_rewards') else 0,
+                'max_reward': max(history.get(
+                    'episode_rewards', [0])),
+                'mean_steps': history.get(
+                    'episode_lengths', [0])[0] if history else 0,
+                'states_explored': results.get(
+                    'q_table_size', 0),
+                'eval_mean_reward': eval_stats.get(
+                    'mean_reward', 0),
+                'eval_std_reward': eval_stats.get(
+                    'std_reward', 0),
+                'eval_min_reward': eval_stats.get(
+                    'min_reward', 0),
+                'eval_max_reward': eval_stats.get(
+                    'max_reward', 0),
+                'eval_mean_steps': eval_stats.get(
+                    'mean_length', 0),
+                'rewards_plot': results.get(
+                    'rewards_plot', ''),
+                'distributions_plot': results.get(
+                    'distributions_plot', '')
             })
 
         except Exception as e:
