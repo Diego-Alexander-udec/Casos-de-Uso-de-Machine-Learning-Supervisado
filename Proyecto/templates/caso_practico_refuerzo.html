@@ -220,10 +220,10 @@
           <div class="col-md-6">
             <h6>Estadísticas de Evaluación:</h6>
             <ul>
-              <li><strong>Recompensa promedio:</strong> {{ "%.2f"|format(eval_mean_reward) }} ± {{ "%.2f"|format(eval_std_reward) }}</li>
-              <li><strong>Recompensa mínima:</strong> {{ "%.2f"|format(eval_min_reward) }}</li>
-              <li><strong>Recompensa máxima:</strong> {{ "%.2f"|format(eval_max_reward) }}</li>
-              <li><strong>Longitud promedio:</strong> {{ "%.2f"|format(eval_mean_length) }} pasos</li>
+              <li><strong>Recompensa promedio:</strong> {{ "%.2f"|format(eval_mean_reward or 0) }} ± {{ "%.2f"|format(eval_std_reward or 0) }}</li>
+              <li><strong>Recompensa mínima:</strong> {{ "%.2f"|format(eval_min_reward or 0) }}</li>
+              <li><strong>Recompensa máxima:</strong> {{ "%.2f"|format(eval_max_reward or 0) }}</li>
+              <li><strong>Longitud promedio:</strong> {{ "%.2f"|format(eval_mean_steps or 0) }} pasos</li>
             </ul>
           </div>
           <div class="col-md-6">

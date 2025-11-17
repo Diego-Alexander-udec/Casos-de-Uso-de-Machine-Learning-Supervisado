@@ -108,7 +108,19 @@ def caso_practico_refuerzo():
         'epsilon_decay': 0.995,
         'epsilon_min': 0.01,
         'bins': 10,
-        'env_id': 'CartPole-v1'
+        'env_id': 'CartPole-v1',
+        'mean_reward': 0,
+        'max_reward': 0,
+        'mean_steps': 0,
+        'states_explored': 0,
+        'eval_mean_reward': 0,
+        'eval_std_reward': 0,
+        'eval_min_reward': 0,
+        'eval_max_reward': 0,
+        'eval_mean_steps': 0,
+        'rewards_plot': '',
+        'distributions_plot': '',
+        'error': None
     }
 
     if request.method == 'POST':
