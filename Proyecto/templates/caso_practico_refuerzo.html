@@ -55,7 +55,7 @@
 
       <!-- Formulario de entrenamiento -->
       <div class="section-card">
-        <h3 class="mb-4"><i class="bi bi-joystick"></i> Entrenar un agente</h3>
+        <h3 class="mb-4">Entrenar un agente</h3>
         <form method="post">
           <div class="row g-3">
             <div class="col-md-4">
@@ -105,8 +105,8 @@
       </div>
       
       <!-- Descripción del entorno -->
-      <div class="section-card">
-        <h3 class="mb-4"><i class="bi bi-robot"></i> Descripción del Entorno</h3>
+      <div class="section-card mt-5">
+        <h3 class="mb-3">Descripción del Entorno</h3>
         <div class="row">
           <div class="col-md-12">
             <h5>{{ env_id or 'CartPole-v1' }} (OpenAI Gymnasium)</h5>
@@ -143,7 +143,7 @@
 
       <!-- Parámetros del algoritmo -->
       <div class="section-card">
-        <h3 class="mb-4"><i class="bi bi-gear"></i> Parámetros del Algoritmo Q-Learning</h3>
+        <h3 class="mb-3">Parámetros del Algoritmo Q-Learning</h3>
         <div class="row">
           <div class="col-md-6">
             <p><strong>Algoritmo:</strong> Q-Learning (Watkins & Dayan, 1992)</p>
@@ -167,7 +167,7 @@
       {% if training_completed %}
       <!-- Resultados del entrenamiento -->
       <div class="section-card">
-        <h3 class="mb-4"><i class="bi bi-graph-up"></i> Resultados del Entrenamiento</h3>
+        <h3 class="mb-4">Resultados del Entrenamiento</h3>
         
         <!-- Métricas principales -->
         <div class="row">
@@ -215,7 +215,7 @@
 
       <!-- Evaluación del agente -->
       <div class="section-card">
-        <h3 class="mb-4"><i class="bi bi-check-circle"></i> Evaluación del Agente Entrenado</h3>
+        <h3 class="mb-4">Evaluación del Agente Entrenado</h3>
         <div class="row">
           <div class="col-md-6">
             <h6>Estadísticas de Evaluación:</h6>
@@ -231,13 +231,13 @@
               <h6 class="alert-heading">Análisis de Convergencia:</h6>
               <p>
                 {% if eval_mean_reward >= 450 %}
-                  ✅ El agente ha convergido exitosamente. La política aprendida mantiene el poste 
+                  El agente ha convergido exitosamente. La política aprendida mantiene el poste 
                   en equilibrio durante la mayor parte del episodio.
                 {% elif eval_mean_reward >= 300 %}
-                  ⚠️ El agente muestra un aprendizaje parcial. Se recomienda aumentar el número 
+                  El agente muestra un aprendizaje parcial. Se recomienda aumentar el número 
                   de episodios de entrenamiento o ajustar los hiperparámetros.
                 {% else %}
-                  ❌ El agente no ha convergido adecuadamente. Se sugiere revisar los parámetros 
+                  El agente no ha convergido adecuadamente. Se sugiere revisar los parámetros 
                   de aprendizaje y aumentar significativamente los episodios de entrenamiento.
                 {% endif %}
               </p>
@@ -246,9 +246,9 @@
         </div>
       </div>
 
-      <!-- Interpretación de resultados -->
+      <!-- Interpretación de Resultados -->
       <div class="section-card">
-        <h3 class="mb-4"><i class="bi bi-lightbulb"></i> Interpretación de Resultados</h3>
+        <h3 class="mb-3">Interpretación de Resultados</h3>
         <h6>Ciclo de Aprendizaje Observado:</h6>
         <ol>
           <li>
@@ -297,8 +297,8 @@
       {% endif %}
 
       <!-- Archivos generados -->
-      <div class="section-card">
-        <h3 class="mb-4"><i class="bi bi-file-earmark-code"></i> Archivos Generados</h3>
+      <div class="section-card mt-5">
+        <h3 class="mb-3">Archivos Generados</h3>
         <ul>
           <li><strong>modelo_rl_cartpole.pkl:</strong> Tabla Q y parámetros del agente entrenado</li>
           <li><strong>static/rl_training_rewards.png:</strong> Gráfica de evolución de recompensas y epsilon</li>
@@ -307,7 +307,7 @@
       </div>
 
       <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3 mb-5">
-        <i class="bi bi-arrow-left"></i> Volver al menú principal
+        Volver al menú principal
       </a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
