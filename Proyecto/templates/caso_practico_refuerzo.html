@@ -231,13 +231,13 @@
               <h6 class="alert-heading">Análisis de Convergencia:</h6>
               <p>
                 {% if eval_mean_reward >= 450 %}
-                  ✅ El agente ha convergido exitosamente. La política aprendida mantiene el poste 
+                  El agente ha convergido exitosamente. La política aprendida mantiene el poste 
                   en equilibrio durante la mayor parte del episodio.
                 {% elif eval_mean_reward >= 300 %}
-                  ⚠️ El agente muestra un aprendizaje parcial. Se recomienda aumentar el número 
+                  El agente muestra un aprendizaje parcial. Se recomienda aumentar el número 
                   de episodios de entrenamiento o ajustar los hiperparámetros.
                 {% else %}
-                  ❌ El agente no ha convergido adecuadamente. Se sugiere revisar los parámetros 
+                  El agente no ha convergido adecuadamente. Se sugiere revisar los parámetros 
                   de aprendizaje y aumentar significativamente los episodios de entrenamiento.
                 {% endif %}
               </p>
