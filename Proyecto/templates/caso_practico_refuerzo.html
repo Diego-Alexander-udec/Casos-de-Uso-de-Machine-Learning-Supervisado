@@ -6,12 +6,309 @@
     <title>Caso Práctico - Aprendizaje por Refuerzo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+      .metric-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 10px 0;
+        backdrop-filter: blur(10px);
+      }
+      .metric-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #4CAF50;
+      }
+      .metric-label {
+        font-size: 0.9rem;
+        color: #ccc;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .section-card {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .img-result {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      }
+      .param-badge {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4CAF50;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        display: inline-block;
+        margin: 5px;
+      }
+    </style>
   </head>
   <body class="fondo-personalizado text-white">
     <div class="container mt-5">
-      <h2 class="text-center mb-4">Caso Práctico: Agente de Aprendizaje por Refuerzo</h2>
+      <h2 class="text-center mb-4">Caso Práctico Interactivo: Agente Q-Learning</h2>
+
+      <!-- Formulario de entrenamiento -->
+      <div class="section-card">
+        <h3 class="mb-4"><i class="bi bi-joystick"></i> Entrenar un agente</h3>
+        <form method="post">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Entorno</label>
+              <select class="form-select" name="env_id">
+                <option value="CartPole-v1" {% if env_id=='CartPole-v1' %}selected{% endif %}>CartPole-v1</option>
+                <option value="MountainCar-v0" {% if env_id=='MountainCar-v0' %}selected{% endif %}>MountainCar-v0</option>
+                <option value="FrozenLake-v1" {% if env_id=='FrozenLake-v1' %}selected{% endif %}>FrozenLake-v1</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Episodios</label>
+              <input type="number" class="form-control" name="episodes" min="50" max="5000" step="50" value="{{ num_episodes or 500 }}" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Bins</label>
+              <input type="number" class="form-control" name="bins" min="4" max="40" step="1" value="{{ bins or 10 }}" />
+            </div>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-md-2">
+              <label class="form-label">α (LR)</label>
+              <input type="number" class="form-control" name="learning_rate" step="0.01" min="0.01" max="1.0" value="{{ learning_rate or 0.1 }}" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">γ</label>
+              <input type="number" class="form-control" name="discount_factor" step="0.01" min="0.0" max="0.999" value="{{ discount_factor or 0.99 }}" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">ε inicial</label>
+              <input type="number" class="form-control" name="epsilon" step="0.01" min="0.0" max="1.0" value="{{ epsilon or 1.0 }}" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">ε decay</label>
+              <input type="number" class="form-control" name="epsilon_decay" step="0.001" min="0.9" max="0.999" value="{{ epsilon_decay or 0.995 }}" />
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">ε min</label>
+              <input type="number" class="form-control" name="epsilon_min" step="0.001" min="0.0" max="0.5" value="{{ epsilon_min or 0.01 }}" />
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="submit" class="btn btn-success w-100">Entrenar</button>
+            </div>
+          </div>
+        </form>
+      </div>
       
-      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3">Volver al menú principal</a>
+      <!-- Descripción del entorno -->
+      <div class="section-card">
+        <h3 class="mb-4"><i class="bi bi-robot"></i> Descripción del Entorno</h3>
+        <div class="row">
+          <div class="col-md-12">
+            <h5>{{ env_id or 'CartPole-v1' }} (OpenAI Gymnasium)</h5>
+            <p>
+              Selecciona un entorno y entrena un agente Q-Learning. Para entornos de observación continua (ej. CartPole, MountainCar) se aplica discretización con "bins". Para entornos discretos (ej. FrozenLake), se aprende directamente sobre los estados enteros.
+            </p>
+            
+            <h6 class="mt-4">Notas rápidas:</h6>
+            <ul>
+              <li><strong>CartPole-v1:</strong> Recompensa +1 por paso, máx. 500. Discretiza 4 variables.</li>
+              <li><strong>MountainCar-v0:</strong> Recompensa -1 por paso hasta llegar a la cima. Discretiza 2 variables.</li>
+              <li><strong>FrozenLake-v1:</strong> Estados discretos. Recompensa 1 al llegar a la meta (por defecto resbaladizo).</li>
+            </ul>
+            
+            <h6 class="mt-4">Espacio de Acciones:</h6>
+            <ul>
+              <li><strong>0:</strong> Empujar el carro hacia la izquierda</li>
+              <li><strong>1:</strong> Empujar el carro hacia la derecha</li>
+            </ul>
+            
+            <h6 class="mt-4">Función de Recompensa:</h6>
+            <p>
+              Se otorga una recompensa de +1 por cada paso en el que el poste permanece vertical. 
+              El episodio termina cuando:
+            </p>
+            <ul>
+              <li>El poste se inclina más de 12 grados (0.209 rad)</li>
+              <li>El carro se sale de los límites [-2.4, 2.4]</li>
+              <li>Se alcanzan 500 pasos (truncamiento)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parámetros del algoritmo -->
+      <div class="section-card">
+        <h3 class="mb-4"><i class="bi bi-gear"></i> Parámetros del Algoritmo Q-Learning</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Algoritmo:</strong> Q-Learning (Watkins & Dayan, 1992)</p>
+            <p><strong>Episodios de entrenamiento:</strong> {{ num_episodes or 1000 }}</p>
+            <p><strong>Episodios de evaluación:</strong> {{ eval_episodes or 100 }}</p>
+          </div>
+          <div class="col-md-6">
+            <span class="param-badge">α (Learning Rate): {{ learning_rate or 0.1 }}</span>
+            <span class="param-badge">γ (Discount Factor): {{ discount_factor or 0.99 }}</span>
+            <span class="param-badge">ε (Epsilon inicial): {{ epsilon or 1.0 }}</span>
+            <span class="param-badge">ε decay: {{ epsilon_decay or 0.995 }}</span>
+            <span class="param-badge">Bins: {{ bins or 10 }}</span>
+          </div>
+        </div>
+        
+        <div class="alert alert-info mt-4" role="alert">
+          <strong>Nota:</strong> Para espacios continuos se discretiza cada dimensión en {{ bins or 10 }} bins. Para espacios discretos (p. ej., FrozenLake), esta configuración no aplica.
+        </div>
+      </div>
+
+      {% if training_completed %}
+      <!-- Resultados del entrenamiento -->
+      <div class="section-card">
+        <h3 class="mb-4"><i class="bi bi-graph-up"></i> Resultados del Entrenamiento</h3>
+        
+        <!-- Métricas principales -->
+        <div class="row">
+          <div class="col-md-3">
+            <div class="metric-card text-center">
+              <div class="metric-value">{{ "%.2f"|format(mean_reward) }}</div>
+              <div class="metric-label">Recompensa Promedio</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="metric-card text-center">
+              <div class="metric-value">{{ "%.2f"|format(max_reward) }}</div>
+              <div class="metric-label">Recompensa Máxima</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="metric-card text-center">
+              <div class="metric-value">{{ "%.2f"|format(mean_length) }}</div>
+              <div class="metric-label">Pasos Promedio</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="metric-card text-center">
+              <div class="metric-value">{{ q_table_size }}</div>
+              <div class="metric-label">Estados Explorados</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráficas -->
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <h5 class="text-center mb-3">Evolución de la Recompensa y Tasa de Exploración</h5>
+            <img src="data:image/png;base64,{{ rewards_plot }}" class="img-result" alt="Gráfica de Recompensas">
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <h5 class="text-center mb-3">Distribución de Recompensas y Longitudes de Episodios</h5>
+            <img src="data:image/png;base64,{{ distributions_plot }}" class="img-result" alt="Distribuciones">
+          </div>
+        </div>
+      </div>
+
+      <!-- Evaluación del agente -->
+      <div class="section-card">
+        <h3 class="mb-4"><i class="bi bi-check-circle"></i> Evaluación del Agente Entrenado</h3>
+        <div class="row">
+          <div class="col-md-6">
+            <h6>Estadísticas de Evaluación:</h6>
+            <ul>
+              <li><strong>Recompensa promedio:</strong> {{ "%.2f"|format(eval_mean_reward) }} ± {{ "%.2f"|format(eval_std_reward) }}</li>
+              <li><strong>Recompensa mínima:</strong> {{ "%.2f"|format(eval_min_reward) }}</li>
+              <li><strong>Recompensa máxima:</strong> {{ "%.2f"|format(eval_max_reward) }}</li>
+              <li><strong>Longitud promedio:</strong> {{ "%.2f"|format(eval_mean_length) }} pasos</li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <div class="alert alert-success" role="alert">
+              <h6 class="alert-heading">Análisis de Convergencia:</h6>
+              <p>
+                {% if eval_mean_reward >= 450 %}
+                  ✅ El agente ha convergido exitosamente. La política aprendida mantiene el poste 
+                  en equilibrio durante la mayor parte del episodio.
+                {% elif eval_mean_reward >= 300 %}
+                  ⚠️ El agente muestra un aprendizaje parcial. Se recomienda aumentar el número 
+                  de episodios de entrenamiento o ajustar los hiperparámetros.
+                {% else %}
+                  ❌ El agente no ha convergido adecuadamente. Se sugiere revisar los parámetros 
+                  de aprendizaje y aumentar significativamente los episodios de entrenamiento.
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interpretación de resultados -->
+      <div class="section-card">
+        <h3 class="mb-4"><i class="bi bi-lightbulb"></i> Interpretación de Resultados</h3>
+        <h6>Ciclo de Aprendizaje Observado:</h6>
+        <ol>
+          <li>
+            <strong>Fase de exploración inicial (episodios 1-200):</strong> 
+            El agente explora aleatoriamente el espacio de estados. Las recompensas son bajas y 
+            variables ya que el agente aún no ha aprendido una política coherente.
+          </li>
+          <li>
+            <strong>Fase de aprendizaje activo (episodios 200-600):</strong> 
+            La tabla Q comienza a reflejar las mejores acciones. Se observa un incremento gradual 
+            en las recompensas a medida que epsilon decae y el agente explota más su conocimiento.
+          </li>
+          <li>
+            <strong>Fase de convergencia (episodios 600-1000):</strong> 
+            El agente alcanza una política estable. Las recompensas se estabilizan cerca del máximo 
+            posible (500 pasos), indicando que ha aprendido a mantener el equilibrio efectivamente.
+          </li>
+        </ol>
+
+        <h6 class="mt-4">Política Aprendida:</h6>
+        <p>
+          El agente ha aprendido a ajustar la posición del carro de manera anticipada para 
+          contrarrestar la inclinación del poste. La estrategia óptima implica:
+        </p>
+        <ul>
+          <li>Mover el carro en la dirección hacia donde se está cayendo el poste</li>
+          <li>Aplicar correcciones pequeñas cuando el poste está cerca del equilibrio</li>
+          <li>Ajustar la velocidad del carro para mantener el sistema estable</li>
+        </ul>
+      </div>
+      {% else %}
+      <!-- Mensaje cuando no hay entrenamiento -->
+      <div class="section-card">
+        <div class="alert alert-warning" role="alert">
+          <h5 class="alert-heading">Modelo no entrenado</h5>
+          <p>
+            El agente aún no ha sido entrenado. Por favor, ejecuta el script de entrenamiento 
+            para generar los resultados y visualizaciones.
+          </p>
+          <hr>
+          <p class="mb-0">
+            <code>python Proyecto/rl_agent_cartpole.py</code>
+          </p>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Archivos generados -->
+      <div class="section-card">
+        <h3 class="mb-4"><i class="bi bi-file-earmark-code"></i> Archivos Generados</h3>
+        <ul>
+          <li><strong>modelo_rl_cartpole.pkl:</strong> Tabla Q y parámetros del agente entrenado</li>
+          <li><strong>static/rl_training_rewards.png:</strong> Gráfica de evolución de recompensas y epsilon</li>
+          <li><strong>static/rl_training_distributions.png:</strong> Histogramas de recompensas y longitudes</li>
+        </ul>
+      </div>
+
+      <a href="{{ url_for('index') }}" class="btn btn-outline-light mt-3 mb-5">
+        <i class="bi bi-arrow-left"></i> Volver al menú principal
+      </a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   </body>
